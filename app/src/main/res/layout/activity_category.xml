@@ -35,7 +35,7 @@
                         android:layout_height="wrap_content"
                         android:text="BookHaven "
                         android:textColor="#FFB3B3 "
-                        android:textSize="40sp"
+                        android:textSize="50sp"
                         android:textStyle="bold"
                         android:typeface="serif" />
 
@@ -49,130 +49,101 @@
                     android:clipToOutline="true"
                     android:contentDescription="Profile"
                     android:padding="8dp"
-                    android:src="@drawable/ic_profile_placeholder" />
+                    android:src="@drawable/logged_in_avatar" />
 
             </LinearLayout>
 
             <!-- Featured Books Section -->
-
-
-            <!-- Economic Books Section -->
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/featuredBooksRecyclerView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="24dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sách kinh tế"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
+                <!-- Back Button -->
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Quay lại"
+                    android:src="@android:drawable/ic_media_previous" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/economicBooksRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"/>
+                <!-- Search EditText -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Thể loại"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"/>
 
-            <!-- Emotional Books Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sách tình cảm"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/emotionalBooksRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"/>
+            </LinearLayout>
 
             <!-- Novel Books Section -->
             <TextView
+                android:id="@+id/tvNovelCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sách tiểu thuyết"
+                android:text="Sách Tiểu thuyết"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/novelBooksRecyclerView"
+                android:id="@+id/rvNovelBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"/>
 
-            <!-- Horror Books Section -->
+            <!-- Economic Books Section -->
             <TextView
+                android:id="@+id/tvEconomicCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sách kinh dị"
+                android:text="Sách Kinh tế"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/horrorBooksRecyclerView"
+                android:id="@+id/rvEconomicBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"/>
 
-            <!-- History Books Section -->
+            <!-- Romance Books Section -->
             <TextView
+                android:id="@+id/tvRomanceCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sách lịch sử"
+                android:text="Sách Tình cảm"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/historyBooksRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"/>
-
-            <!-- Science Books Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sách khoa học "
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/scienceBooksRecyclerView"
+                android:id="@+id/rvRomanceBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
@@ -190,10 +161,7 @@
         android:layout_gravity="bottom"
         android:background="#FF6666"
         app:itemIconTint="@android:color/white"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconSize="50dp"
-        app:labelVisibilityMode="labeled"
-        app:itemHorizontalTranslationEnabled="false" />
-
+        app:itemTextColor="@android:color/white"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -49,15 +49,38 @@
                     android:clipToOutline="true"
                     android:contentDescription="Profile"
                     android:padding="8dp"
-                    android:src="@drawable/ic_profile_placeholder" />
+                    android:src="@drawable/logged_in_avatar" />
 
             </LinearLayout>
+            <!-- Phần chỉ hiển thị trong CategoryActivity -->
+            <LinearLayout
+                android:id="@+id/categoryHeaderLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
+                <!-- Back Button -->
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Quay lại"
+                    android:src="@android:drawable/ic_media_previous" />
+
+                <!-- Search EditText -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Thể loại"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"/>
+
+            </LinearLayout>
             <!-- Featured Books Section -->
-
-
-            <!-- Economic Books Section -->
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/featuredBooksRecyclerView"
                 android:layout_width="match_parent"
@@ -194,6 +217,5 @@
         app:itemIconSize="50dp"
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
