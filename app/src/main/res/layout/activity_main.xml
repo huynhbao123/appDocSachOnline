@@ -1,92 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#FFFFFF">
 
-    <!-- Header với nút back -->
-    <LinearLayout
+    <!-- Header với nút back và bookmark -->
+    <RelativeLayout
+        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
 
         <ImageButton
             android:id="@+id/backButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_media_previous"
-            android:contentDescription="Back" />
-    </LinearLayout>
+            android:src="@drawable/ic_previous_chapter"
+            android:contentDescription="Back"
+            app:tint="#000000" />
+
+        <ImageButton
+            android:id="@+id/savePositionButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_bookmark"
+            android:contentDescription="Save Position"
+            app:tint="#000000" />
+    </RelativeLayout>
 
     <View
+        android:id="@+id/headerDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@id/headerLayout"
         android:background="#EEEEEE" />
 
     <!-- Nội dung chính -->
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_above="@id/customizePanel"
+        android:layout_below="@id/headerDivider"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/contentText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:lineSpacingMultiplier="1.2"
-            android:textColor="#000000" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/chapterTitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chương 01: Kinh tế"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/contentText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:lineSpacingMultiplier="1.2"
+                android:textColor="#000000" />
+        </LinearLayout>
     </ScrollView>
 
-    <View
+    <!-- Bookmark Panel (ban đầu ẩn) -->
+    <LinearLayout
+        android:id="@+id/bookmarkPanel"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_above="@id/customizePanel"
+        android:layout_below="@id/headerDivider"
+        android:background="#F2F2F2"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- Phần trên của bookmark panel -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <!-- Bìa sách -->
+            <ImageView
+                android:id="@+id/bookCover"
+                android:layout_width="60dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:background="#0066CC" />
+
+            <!-- Tiêu đề sách -->
+            <TextView
+                android:id="@+id/bookTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="Kinh tế số"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Phần danh sách -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#FFFFFF">
+
+            <!-- Tiêu đề phần chương -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="#EEEEEE"
+                android:text="Danh sách chương"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+
+            <!-- Danh sách chương -->
+            <ListView
+                android:id="@+id/chapterListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#E0E0E0"
+                android:dividerHeight="1dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Saved Positions Panel (ban đầu ẩn) -->
+    <LinearLayout
+        android:id="@+id/savedPositionsPanel"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_above="@id/customizePanel"
+        android:layout_below="@id/headerDivider"
+        android:background="#F2F2F2"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- Phần trên của saved positions panel -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <!-- Bìa sách -->
+            <ImageView
+                android:id="@+id/bookCoverSaved"
+                android:layout_width="60dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:background="#0066CC" />
+
+            <!-- Tiêu đề sách -->
+            <TextView
+                android:id="@+id/bookTitleSaved"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="Kinh tế số"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Phần danh sách -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#FFFFFF">
+
+            <!-- Tiêu đề phần bookmarks -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="#EEEEEE"
+                android:text="Vị trí đã lưu"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+
+            <!-- Danh sách bookmarks -->
+            <ListView
+                android:id="@+id/bookmarkListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#E0E0E0"
+                android:dividerHeight="1dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Customize Panel (ban đầu ẩn) -->
+    <include
+        android:id="@+id/customizePanel"
+        layout="@layout/customize_panel"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#EEEEEE" />
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomNavLayout" />
 
     <!-- Bottom navigation -->
     <LinearLayout
+        android:id="@+id/bottomNavLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:orientation="horizontal">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:elevation="4dp">
 
+        <!-- Nút quay lại chương trước -->
+        <ImageButton
+            android:id="@+id/prevChapterButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_previous_chapter"
+            android:contentDescription="Previous Chapter"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            app:tint="#000000" />
+
+        <!-- Nút Home -->
         <ImageButton
             android:id="@+id/homeButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_compass"
-            android:contentDescription="Home" />
+            android:src="@drawable/ic_home"
+            android:contentDescription="Home"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            app:tint="#000000" />
 
+        <!-- Biểu tượng chữ "A" (điều chỉnh định dạng) -->
         <ImageButton
             android:id="@+id/textSizeButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_edit"
-            android:contentDescription="Text Size" />
+            android:src="@drawable/ic_text_format"
+            android:contentDescription="Text Size"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            app:tint="#000000" />
 
-        <ImageButton
-            android:id="@+id/brightnessButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_preferences"
-            android:contentDescription="Brightness" />
-
+        <!-- Biểu tượng danh sách chương (thay chữ "i") -->
         <ImageButton
             android:id="@+id/bookmarkButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_save"
-            android:contentDescription="Bookmark" />
+            android:src="@drawable/ic_list"
+            android:contentDescription="Chapters"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            app:tint="#000000" />
+
+        <!-- Nút bookmark -->
+        <ImageButton
+            android:id="@+id/savePositionButtonBottom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_bookmark"
+            android:contentDescription="Bookmarks"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            app:tint="#000000" />
+
+        <!-- Nút chuyển chương tiếp -->
+        <ImageButton
+            android:id="@+id/nextChapterButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_next_chapter"
+            android:contentDescription="Next Chapter"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            app:tint="#000000" />
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
