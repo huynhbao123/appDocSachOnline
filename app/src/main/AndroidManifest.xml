@@ -48,7 +48,7 @@
         </activity>
 
         <activity android:name=".BookDetailActivity" />
-        <activity android:name=".LibraryActivity" />
+        <activity android:name=".LibraryActivitylinh" />
         <activity android:name=".TimKiem.SearchResultsActivity" />
 
         <activity
@@ -60,7 +60,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".CategoryActivity"
+            android:name=".CategoryActivitylinh"
             android:exported="false" />
 
     </application>

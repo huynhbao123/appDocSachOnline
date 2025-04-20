@@ -19,7 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryActivity extends AppCompatActivity {
+public class CategoryActivitylinh extends AppCompatActivity {
     private RecyclerView featuredBooksRecyclerView, economicBooksRecyclerView, emotionalBooksRecyclerView,
             novelBooksRecyclerView, horrorBooksRecyclerView, historyBooksRecyclerView, scienceBooksRecyclerView;
     private AccountMenuPopup accountMenuPopup;
@@ -110,7 +110,7 @@ public class CategoryActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
             } else if (itemId == R.id.navigation_library) {
-                startActivity(new Intent(this, LibraryActivity.class));
+                startActivity(new Intent(this, LibraryActivitylinh.class));
                 return true;
             }
             return false;

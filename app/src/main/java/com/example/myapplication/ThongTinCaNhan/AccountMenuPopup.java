@@ -10,9 +10,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Gravity;
 
-import com.example.myapplication.CategoryActivity;
+import com.example.myapplication.CategoryActivitylinh;
 import com.example.myapplication.DangNhap.ChangePasswordActivity;
-import com.example.myapplication.LibraryActivity;
+import com.example.myapplication.LibraryActivitylinh;
 import com.example.myapplication.TrangChu;
 import com.example.myapplication.R;
 
@@ -56,7 +56,7 @@ public class AccountMenuPopup {
 
         // Thư viện đọc
         popupView.findViewById(R.id.tvLibrary).setOnClickListener(v -> {
-            Intent intent = new Intent(context, LibraryActivity.class);
+            Intent intent = new Intent(context, LibraryActivitylinh.class);
             context.startActivity(intent);
             popupWindow.dismiss();
         });
@@ -70,7 +70,7 @@ public class AccountMenuPopup {
 
         // Thể loại
         popupView.findViewById(R.id.tvCategory).setOnClickListener(v -> {
-            Intent intent = new Intent(context, CategoryActivity.class);
+            Intent intent = new Intent(context, CategoryActivitylinh.class);
             context.startActivity(intent);
             popupWindow.dismiss();
         });

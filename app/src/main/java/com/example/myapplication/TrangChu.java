@@ -153,7 +153,7 @@ public class TrangChu extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.navigation_library) {
                     if (isLoggedIn()) {
-                        Intent intent = new Intent(TrangChu.this, LibraryActivity.class);
+                        Intent intent = new Intent(TrangChu.this, LibraryActivitylinh.class);
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(TrangChu.this, LoginActivity.class);

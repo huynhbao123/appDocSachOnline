@@ -13,7 +13,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.Category;
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+public class CategoryAdapterlinh extends RecyclerView.Adapter<CategoryAdapterlinh.CategoryViewHolder> {
     private List<Category> categories;
     private Context context;
     private OnItemClickListener listener;
@@ -22,7 +22,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         void onItemClick(Category category);
     }
 
-    public CategoryAdapter(List<Category> categories) {
+    public CategoryAdapterlinh(List<Category> categories) {
         this.categories = categories;
     }
 
@@ -34,7 +34,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_categorylinh, parent, false);
         return new CategoryViewHolder(view);
     }
 
