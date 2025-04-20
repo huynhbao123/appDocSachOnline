@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:padding="8dp">
+
+<ImageView
+    android:id="@+id/bookCover"
+    android:layout_width="100dp"
+    android:layout_height="150dp"
+    android:scaleType="centerCrop"
+    android:contentDescription="Bìa sách" />
+
+<TextView
+    android:id="@+id/bookTitle"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:text="Tiêu đề sách"
+    android:textSize="14sp"
+    android:textColor="#000000"
+    android:maxLines="2"
+    android:ellipsize="end" />
+
+<TextView
+    android:id="@+id/bookAuthor"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:text="Tác giả"
+    android:textSize="12sp"
+    android:textColor="#666666"
+    android:maxLines="1"
+    android:ellipsize="end" />
+</LinearLayout>

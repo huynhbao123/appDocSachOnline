@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Gradient chuyển màu -->
+    <gradient
+        android:startColor="#B0DCEF"
+        android:endColor="#FFFFFF"
+    android:angle="270"
+    android:type="linear" />
+    <!-- Bo góc (tùy chọn) -->
+    <corners android:radius="10dp" />   <!-- Bo góc 10dp, bạn có thể điều chỉnh -->
+</shape>
