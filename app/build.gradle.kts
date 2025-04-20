@@ -37,16 +37,17 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    // Added dependencies
+    // Core dependencies
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
-    implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("com.squareup.picasso:picasso:2.8")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 
+    // Use Glide for image loading (remove Picasso)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
+    // Test dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
 }
