@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityTien extends AppCompatActivity {
     private RecyclerView categoriesRecyclerView;
     private CategoryAdapter categoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_tien);
 
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(categories, new CategoryAdapter.OnCategoryClickListener() {
             @Override
             public void onCategoryClick(Category category) {
-                Intent intent = new Intent(MainActivity.this, CategoryDetailActivity.class);
+                Intent intent = new Intent(MainActivityTien.this, CategoryDetailActivity.class);
                 intent.putExtra("category_id", category.getId());
                 intent.putExtra("category_title", category.getTitle());
                 startActivity(intent);

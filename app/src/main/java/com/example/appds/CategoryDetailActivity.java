@@ -40,7 +40,7 @@ public class CategoryDetailActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_home) {
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, MainActivityTien.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.navigation_menu) {

@@ -55,7 +55,7 @@ public class LibraryActivity extends AppCompatActivity {
         bottomNavigation.setSelectedItemId(R.id.navigation_menu);
         bottomNavigation.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_home) {
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, MainActivityTien.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.navigation_menu) {
