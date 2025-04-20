@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.BookDetailActivity;
-import com.example.myapplication.MainActivity;
+import com.example.myapplication.TrangChu;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.PopularBookAdapter;
 import com.example.myapplication.model.Book;
@@ -63,7 +63,7 @@ public class SearchActivity extends AppCompatActivity {
     private void setupClickListeners() {
         // Back button click
         btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+            Intent intent = new Intent(SearchActivity.this, TrangChu.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();

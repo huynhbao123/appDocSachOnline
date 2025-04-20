@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.MainActivity;
+import com.example.myapplication.TrangChu;
 import com.example.myapplication.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
             // Quay lại MainActivity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, TrangChu.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

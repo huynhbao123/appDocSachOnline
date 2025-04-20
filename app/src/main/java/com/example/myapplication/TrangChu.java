@@ -20,7 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class TrangChu extends AppCompatActivity {
     private RecyclerView featuredBooksRecyclerView, economicBooksRecyclerView, emotionalBooksRecyclerView,
             novelBooksRecyclerView, horrorBooksRecyclerView, historyBooksRecyclerView, scienceBooksRecyclerView;
     private ImageView avatarImageView;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_trangchu);
 
         avatarImageView = findViewById(R.id.avatarImageView);
         accountMenuPopup = new AccountMenuPopup(this);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             if (isLoggedIn()) {
                 accountMenuPopup.show(avatarImageView);
             } else {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(TrangChu.this, LoginActivity.class));
             }
         });
 
@@ -144,19 +144,19 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.navigation_search) {
                     if (isLoggedIn()) {
-                        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                        Intent intent = new Intent(TrangChu.this, SearchActivity.class);
                         startActivity(intent);
                     } else {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                         startActivity(intent);
                     }
                     return true;
                 } else if (itemId == R.id.navigation_library) {
                     if (isLoggedIn()) {
-                        Intent intent = new Intent(MainActivity.this, LibraryActivity.class);
+                        Intent intent = new Intent(TrangChu.this, LibraryActivity.class);
                         startActivity(intent);
                     } else {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                         startActivity(intent);
                     }
                     return true;
@@ -180,12 +180,12 @@ public class MainActivity extends AppCompatActivity {
         BookAdapter featuredAdapter = new BookAdapter(featuredBooks, true);
         featuredAdapter.setOnItemClickListener(book -> {
             if (isLoggedIn()) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -244,12 +244,12 @@ public class MainActivity extends AppCompatActivity {
         BookAdapter economicAdapter = new BookAdapter(economicBooks, false);
         economicAdapter.setOnItemClickListener(book -> {
             if (isLoggedIn()) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -270,12 +270,12 @@ public class MainActivity extends AppCompatActivity {
         BookAdapter emotionalAdapter = new BookAdapter(emotionalBooks, false);
         emotionalAdapter.setOnItemClickListener(book -> {
             if (isLoggedIn()) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -296,12 +296,12 @@ public class MainActivity extends AppCompatActivity {
         BookAdapter novelAdapter = new BookAdapter(novelBooks, false);
         novelAdapter.setOnItemClickListener(book -> {
             if (isLoggedIn()) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -322,12 +322,12 @@ public class MainActivity extends AppCompatActivity {
         BookAdapter horrorAdapter = new BookAdapter(horrorBooks, false);
         horrorAdapter.setOnItemClickListener(book -> {
             if (isLoggedIn()) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -348,12 +348,12 @@ public class MainActivity extends AppCompatActivity {
         BookAdapter historyAdapter = new BookAdapter(historyBooks, false);
         historyAdapter.setOnItemClickListener(book -> {
             if (isLoggedIn()) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -374,12 +374,12 @@ public class MainActivity extends AppCompatActivity {
         BookAdapter scienceAdapter = new BookAdapter(scienceBooks, false);
         scienceAdapter.setOnItemClickListener(book -> {
             if (isLoggedIn()) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TrangChu.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

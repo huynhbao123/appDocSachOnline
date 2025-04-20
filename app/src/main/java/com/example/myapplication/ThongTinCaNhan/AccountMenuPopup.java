@@ -13,7 +13,7 @@ import android.view.Gravity;
 import com.example.myapplication.CategoryActivity;
 import com.example.myapplication.DangNhap.ChangePasswordActivity;
 import com.example.myapplication.LibraryActivity;
-import com.example.myapplication.MainActivity;
+import com.example.myapplication.TrangChu;
 import com.example.myapplication.R;
 
 public class AccountMenuPopup {
@@ -84,7 +84,7 @@ public class AccountMenuPopup {
             editor.apply();
 
             // ✅ Quay về MainActivity (với giao diện chưa đăng nhập)
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(context, TrangChu.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
 

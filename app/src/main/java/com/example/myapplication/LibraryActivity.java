@@ -16,7 +16,7 @@ public class LibraryActivity extends AppCompatActivity {
 
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(LibraryActivity.this, MainActivity.class);
+            Intent intent = new Intent(LibraryActivity.this, TrangChu.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
