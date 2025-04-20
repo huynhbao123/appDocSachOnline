@@ -17,5 +17,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivityTien"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReadingListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FavoritesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LibraryActivity"
+            android:exported="false" />
     </application>
 </manifest>
