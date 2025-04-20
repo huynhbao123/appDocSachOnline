@@ -6,7 +6,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.myapplication.adapter.CategoryAdapter;
+import com.example.myapplication.adapter.CategoryAdapter_Tien;
 import com.example.myapplication.model.Book;
 import com.example.myapplication.model.Category;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MainActivityTien extends AppCompatActivity {
     private RecyclerView categoriesRecyclerView;
-    private CategoryAdapter categoryAdapter;
+    private CategoryAdapter_Tien categoryAdapterTien;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class MainActivityTien extends AppCompatActivity {
         );
         categories.add(new Category("3", "Sách Tình cảm", romance));
 
-        categoryAdapter = new CategoryAdapter(categories, new CategoryAdapter.OnCategoryClickListener() {
+        categoryAdapterTien = new CategoryAdapter_Tien(categories, new CategoryAdapter_Tien.OnCategoryClickListener() {
             @Override
             public void onCategoryClick(Category category) {
                 Intent intent = new Intent(MainActivityTien.this, CategoryDetailActivity.class);
@@ -113,6 +113,6 @@ public class MainActivityTien extends AppCompatActivity {
             }
         });
 
-        categoriesRecyclerView.setAdapter(categoryAdapter);
+        categoriesRecyclerView.setAdapter(categoryAdapterTien);
     }
 }

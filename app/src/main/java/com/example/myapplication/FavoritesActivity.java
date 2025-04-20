@@ -5,7 +5,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.myapplication.adapter.BookAdapter;
+import com.example.myapplication.adapter.BookAdapter_Tien;
 
 public class FavoritesActivity extends AppCompatActivity {
 
@@ -21,9 +21,9 @@ public class FavoritesActivity extends AppCompatActivity {
         favoritesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         LibraryManager libraryManager = LibraryManager.getInstance();
-        BookAdapter bookAdapter = new BookAdapter(libraryManager.getFavoritesList(), book -> {
+        BookAdapter_Tien bookAdapterTien = new BookAdapter_Tien(libraryManager.getFavoritesList(), book -> {
             // Handle book click (e.g., open book details)
         });
-        favoritesRecyclerView.setAdapter(bookAdapter);
+        favoritesRecyclerView.setAdapter(bookAdapterTien);
     }
 }

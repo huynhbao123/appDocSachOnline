@@ -12,7 +12,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.Book;
 import java.util.List;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
+public class BookAdapter_Tien extends RecyclerView.Adapter<BookAdapter_Tien.BookViewHolder> {
     private List<Book> books;
     private OnBookClickListener listener;
 
@@ -20,7 +20,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         void onBookClick(Book book);
     }
 
-    public BookAdapter(List<Book> books, OnBookClickListener listener) {
+    public BookAdapter_Tien(List<Book> books, OnBookClickListener listener) {
         this.books = books;
         this.listener = listener;
     }

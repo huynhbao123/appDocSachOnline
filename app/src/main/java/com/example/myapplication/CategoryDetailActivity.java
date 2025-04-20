@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.myapplication.adapter.BookAdapter;
+import com.example.myapplication.adapter.BookAdapter_Tien;
 import com.example.myapplication.model.Book;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CategoryDetailActivity extends AppCompatActivity {
     private RecyclerView booksGrid;
-    private BookAdapter bookAdapter;
+    private BookAdapter_Tien bookAdapterTien;
     private TextView categoryTitle;
 
     @Override
@@ -70,9 +70,9 @@ public class CategoryDetailActivity extends AppCompatActivity {
             books.add(new Book("9", "Lá Thư Tình", R.drawable.book_la_thu_tinh));
         }
 
-        bookAdapter = new BookAdapter(books, book -> {
+        bookAdapterTien = new BookAdapter_Tien(books, book -> {
             // Handle book click
         });
-        booksGrid.setAdapter(bookAdapter);
+        booksGrid.setAdapter(bookAdapterTien);
     }
 }

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.myapplication.adapter.BookAdapter;
+import com.example.myapplication.adapter.BookAdapter_Tien;
 import com.example.myapplication.model.Book;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class LibraryActivity extends AppCompatActivity {
         RecyclerView readingListRecyclerView = findViewById(R.id.readingListRecyclerView);
         readingListRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         List<Book> readingListLimited = getLimitedList(libraryManager.getReadingList(), 6);
-        BookAdapter readingListAdapter = new BookAdapter(readingListLimited, book -> {
+        BookAdapter_Tien readingListAdapter = new BookAdapter_Tien(readingListLimited, book -> {
             // Xử lý khi nhấn vào sách (nếu cần)
         });
         readingListRecyclerView.setAdapter(readingListAdapter);
@@ -45,7 +45,7 @@ public class LibraryActivity extends AppCompatActivity {
         RecyclerView favoritesRecyclerView = findViewById(R.id.favoritesRecyclerView);
         favoritesRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         List<Book> favoritesListLimited = getLimitedList(libraryManager.getFavoritesList(), 6);
-        BookAdapter favoritesAdapter = new BookAdapter(favoritesListLimited, book -> {
+        BookAdapter_Tien favoritesAdapter = new BookAdapter_Tien(favoritesListLimited, book -> {
             // Xử lý khi nhấn vào sách (nếu cần)
         });
         favoritesRecyclerView.setAdapter(favoritesAdapter);

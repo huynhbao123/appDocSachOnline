@@ -5,7 +5,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.myapplication.adapter.BookAdapter;
+import com.example.myapplication.adapter.BookAdapter_Tien;
 
 public class ReadingListActivity extends AppCompatActivity {
 
@@ -21,9 +21,9 @@ public class ReadingListActivity extends AppCompatActivity {
         readingListRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         LibraryManager libraryManager = LibraryManager.getInstance();
-        BookAdapter bookAdapter = new BookAdapter(libraryManager.getReadingList(), book -> {
+        BookAdapter_Tien bookAdapterTien = new BookAdapter_Tien(libraryManager.getReadingList(), book -> {
             // Handle book click (e.g., open book details)
         });
-        readingListRecyclerView.setAdapter(bookAdapter);
+        readingListRecyclerView.setAdapter(bookAdapterTien);
     }
 }

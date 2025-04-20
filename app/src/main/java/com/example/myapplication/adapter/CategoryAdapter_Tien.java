@@ -14,7 +14,7 @@ import com.example.myapplication.model.Category;
 
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+public class CategoryAdapter_Tien extends RecyclerView.Adapter<CategoryAdapter_Tien.CategoryViewHolder> {
     private List<Category> categories;
     private OnCategoryClickListener listener;
 
@@ -23,7 +23,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         void onBookClick(Category category, int bookPosition);
     }
 
-    public CategoryAdapter(List<Category> categories, OnCategoryClickListener listener) {
+    public CategoryAdapter_Tien(List<Category> categories, OnCategoryClickListener listener) {
         this.categories = categories;
         this.listener = listener;
     }
@@ -40,14 +40,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Category category = categories.get(position);
         holder.categoryTitle.setText(category.getTitle());
         
-        BookAdapter bookAdapter = new BookAdapter(category.getBooks(), book -> {
+        BookAdapter_Tien bookAdapterTien = new BookAdapter_Tien(category.getBooks(), book -> {
             if (listener != null) {
                 int bookPosition = category.getBooks().indexOf(book);
                 listener.onBookClick(category, bookPosition);
             }
         });
         
-        holder.booksRecyclerView.setAdapter(bookAdapter);
+        holder.booksRecyclerView.setAdapter(bookAdapterTien);
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onCategoryClick(category);
