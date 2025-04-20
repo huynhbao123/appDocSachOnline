@@ -1,6 +1,6 @@
-package com.example.appds;
+package com.example.myapplication;
 
-import com.example.appds.model.Book;
+import com.example.myapplication.model.Book;
 import java.util.ArrayList;
 import java.util.List;
 

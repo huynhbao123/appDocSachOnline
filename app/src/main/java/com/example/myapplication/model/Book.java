@@ -1,4 +1,4 @@
-package com.example.appds.model;
+package com.example.myapplication.model;
 
 public class Book {
     private String id;

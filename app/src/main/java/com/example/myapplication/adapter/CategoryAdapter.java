@@ -1,4 +1,4 @@
-package com.example.appds.adapter;
+package com.example.myapplication.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appds.R;
-import com.example.appds.model.Category;
+import com.example.myapplication.R;
+import com.example.myapplication.model.Category;
 
 import java.util.List;
 

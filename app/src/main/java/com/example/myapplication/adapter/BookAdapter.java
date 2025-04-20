@@ -1,4 +1,4 @@
-package com.example.appds.adapter;
+package com.example.myapplication.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.appds.R;
-import com.example.appds.model.Book;
+import com.example.myapplication.R;
+
+import com.example.myapplication.model.Book;
 import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {

@@ -1,4 +1,4 @@
-package com.example.appds;
+package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,9 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.appds.adapter.CategoryAdapter;
-import com.example.appds.model.Book;
-import com.example.appds.model.Category;
+import com.example.myapplication.adapter.CategoryAdapter;
+import com.example.myapplication.model.Book;
+import com.example.myapplication.model.Category;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package com.example.appds;
+package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +7,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.appds.adapter.BookAdapter;
-import com.example.appds.model.Book;
+import com.example.myapplication.adapter.BookAdapter;
+import com.example.myapplication.model.Book;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
