@@ -17,51 +17,29 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <categorylinh android:name="android.intent.categorylinh.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".DangNhap.LoginActivity"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".DangNhap.RegisterActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
-            android:name=".DangNhap.forgotpassActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
-            android:name=".DangNhap.OtpActivity"
-            android:exported="false">
-        </activity>
-
-
-        <activity
-            android:name=".TimKiem.SearchActivity"
-            android:exported="true">
-        </activity>
-
+        <!-- HEAD (nhánh hiện tại) -->
+        <activity android:name=".DangNhap.LoginActivity" android:exported="true" />
+        <activity android:name=".DangNhap.RegisterActivity" android:exported="false" />
+        <activity android:name=".DangNhap.forgotpassActivity" android:exported="false" />
+        <activity android:name=".DangNhap.OtpActivity" android:exported="false" />
+        <activity android:name=".TimKiem.SearchActivity" android:exported="true" />
         <activity android:name=".BookDetailActivity" />
         <activity android:name=".LibraryActivitylinh" />
         <activity android:name=".TimKiem.SearchResultsActivity" />
+        <activity android:name=".ThongTinCaNhan.AccountInfoActivity" android:exported="false" />
+        <activity android:name=".DangNhap.ChangePasswordActivity" android:exported="false" />
+        <activity android:name=".CategoryActivitylinh" android:exported="false" />
 
-        <activity
-            android:name=".ThongTinCaNhan.AccountInfoActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".DangNhap.ChangePasswordActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".CategoryActivitylinh"
-            android:exported="false" />
+        <!-- Tien2 -->
+        <activity android:name=".MainActivityTien" android:exported="false" />
+        <activity android:name=".CategoryDetailActivity" android:exported="false" />
+        <activity android:name=".ReadingListActivity" android:exported="false" />
+        <activity android:name=".FavoritesActivity" android:exported="false" />
+        <activity android:name=".LibraryActivity" android:exported="false" />
 
     </application>
 </manifest>
