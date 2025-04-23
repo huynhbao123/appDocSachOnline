@@ -50,7 +50,7 @@ public class BookAdapterlinh extends RecyclerView.Adapter<BookAdapterlinh.BookVi
                     .inflate(R.layout.item_featured_book, parent, false);
         } else {
             view = LayoutInflater.from(context)
-                    .inflate(R.layout.item_book, parent, false);
+                    .inflate(R.layout.item_book_linh, parent, false);
         }
         return new BookViewHolder(view);
     }
