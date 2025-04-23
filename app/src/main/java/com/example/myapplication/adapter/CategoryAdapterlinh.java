@@ -10,19 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
-import com.example.myapplication.model.Category;
+import com.example.myapplication.model.Categorylinh;
 import java.util.List;
 
 public class CategoryAdapterlinh extends RecyclerView.Adapter<CategoryAdapterlinh.CategoryViewHolder> {
-    private List<Category> categories;
+    private List<Categorylinh> categories;
     private Context context;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(Category category);
+        void onItemClick(Categorylinh categorylinh);
     }
 
-    public CategoryAdapterlinh(List<Category> categories) {
+    public CategoryAdapterlinh(List<Categorylinh> categories) {
         this.categories = categories;
     }
 
@@ -40,8 +40,8 @@ public class CategoryAdapterlinh extends RecyclerView.Adapter<CategoryAdapterlin
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        Category category = categories.get(position);
-        holder.bind(category, listener);
+        Categorylinh categorylinh = categories.get(position);
+        holder.bind(categorylinh, listener);
     }
 
     @Override
@@ -61,19 +61,19 @@ public class CategoryAdapterlinh extends RecyclerView.Adapter<CategoryAdapterlin
             tvBookCount = itemView.findViewById(R.id.tvBookCount);
         }
 
-        public void bind(Category category, OnItemClickListener listener) {
-            tvCategoryName.setText(category.getName());
-            tvBookCount.setText(category.getBookCount() + " cuốn sách");
+        public void bind(Categorylinh categorylinh, OnItemClickListener listener) {
+            tvCategoryName.setText(categorylinh.getName());
+            tvBookCount.setText(categorylinh.getBookCount() + " cuốn sách");
 
-            if (category.getImageUrl() != null && !category.getImageUrl().isEmpty()) {
+            if (categorylinh.getImageUrl() != null && !categorylinh.getImageUrl().isEmpty()) {
                 Glide.with(itemView.getContext())
-                        .load(category.getImageUrl())
+                        .load(categorylinh.getImageUrl())
                         .into(imgCategory);
             }
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
-                    listener.onItemClick(category);
+                    listener.onItemClick(categorylinh);
                 }
             });
         }

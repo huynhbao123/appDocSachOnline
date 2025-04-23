@@ -13,31 +13,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.DangNhap.LoginActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.model.Book;
 
 import java.util.List;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
-    private List<Book> books;
+public class BookAdapterlinh extends RecyclerView.Adapter<BookAdapterlinh.BookViewHolder> {
+    private List<com.example.myapplication.model.Booklinh> booklinhs;
     private boolean isFeatured;
     private Context context;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(Book book);
+        void onItemClick(com.example.myapplication.model.Booklinh booklinh);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public BookAdapter(List<Book> books, boolean isFeatured) {
-        this.books = books;
+    public BookAdapterlinh(List<com.example.myapplication.model.Booklinh> booklinhs, boolean isFeatured) {
+        this.booklinhs = booklinhs;
         this.isFeatured = isFeatured;
     }
 
-    public void updateBooks(List<Book> newBooks) {
-        this.books = newBooks;
+    public void updateBooks(List<com.example.myapplication.model.Booklinh> newBooklinhs) {
+        this.booklinhs = newBooklinhs;
         notifyDataSetChanged();
     }
 
@@ -58,11 +57,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-        Book book = books.get(position);
+        com.example.myapplication.model.Booklinh booklinh = booklinhs.get(position);
 
         // Load book image
         Glide.with(context)
-                .load(book.getImageUrl())
+                .load(booklinh.getImageUrl())
                 .placeholder(R.drawable.book_placeholder)
                 .into(holder.bookImage);
 
@@ -73,7 +72,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
             if (isLoggedIn) {
                 if (listener != null) {
-                    listener.onItemClick(book);
+                    listener.onItemClick(booklinh);
                 }
             } else {
                 Intent intent = new Intent(context, LoginActivity.class);
@@ -90,7 +89,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     @Override
     public int getItemCount() {
-        return books != null ? books.size() : 0;
+        return booklinhs != null ? booklinhs.size() : 0;
     }
 
     static class BookViewHolder extends RecyclerView.ViewHolder {

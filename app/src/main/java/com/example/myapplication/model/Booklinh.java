@@ -1,12 +1,12 @@
 package com.example.myapplication.model;
 
-public class Book {
+public class Booklinh {
     private String id;
     private String title;
     private String imageUrl;
     private String category;
 
-    public Book(String id, String title, String imageUrl, String category) {
+    public Booklinh(String id, String title, String imageUrl, String category) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;

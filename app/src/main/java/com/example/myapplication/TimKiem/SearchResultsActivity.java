@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.BookDetailActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.adapter.BookAdapter;
-import com.example.myapplication.model.Book;
+import com.example.myapplication.adapter.BookAdapterlinh;
+
 import java.util.ArrayList;
 import java.util.List;
 import android.widget.Toast;
-
 
 public class SearchResultsActivity extends AppCompatActivity {
     private EditText edtSearch;
@@ -26,7 +25,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private ImageButton btnSearch;
     private TextView tvResultsCount;
     private RecyclerView searchResultsRecyclerView;
-    private BookAdapter bookAdapter;
+    private BookAdapterlinh bookAdapterlinh;
     private String currentQuery;
 
     @Override
@@ -34,14 +33,12 @@ public class SearchResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        // Get the search query from intent
-        currentQuery = getIntent().getStringExtra("query");
+        currentQuery = getIntent().getStringExtra("search_query");
 
         initializeViews();
         setupRecyclerView();
         setupClickListeners();
 
-        // Set the search query in the EditText
         if (currentQuery != null) {
             edtSearch.setText(currentQuery);
             performSearch(currentQuery);
@@ -58,46 +55,32 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        bookAdapter = new BookAdapter(new ArrayList<>(), false);
-        bookAdapter.setOnItemClickListener(book -> {
+        bookAdapterlinh = new BookAdapterlinh(new ArrayList<>(), false);
+        bookAdapterlinh.setOnItemClickListener(book -> {
             Intent intent = new Intent(SearchResultsActivity.this, BookDetailActivity.class);
             intent.putExtra("bookId", book.getId());
             intent.putExtra("bookTitle", book.getTitle());
             startActivity(intent);
         });
-        searchResultsRecyclerView.setAdapter(bookAdapter);
+        searchResultsRecyclerView.setAdapter(bookAdapterlinh);
     }
 
     private void setupClickListeners() {
-        // Back button click
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(SearchResultsActivity.this, SearchActivity.class);
             startActivity(intent);
             finish();
-
         });
 
-        // Search button click
         btnSearch.setOnClickListener(v -> {
             String query = edtSearch.getText().toString().trim();
-
             if (!query.isEmpty()) {
-                Intent intent = new Intent(SearchResultsActivity.this, SearchActivity.class);
-                intent.putExtra("search_query", query);  // Gửi dữ liệu tìm kiếm
-                startActivity(intent);
+                performSearch(query);
             } else {
                 Toast.makeText(SearchResultsActivity.this, "Vui lòng nhập từ khóa tìm kiếm!", Toast.LENGTH_SHORT).show();
             }
         });
 
-
-
-
-
-
-
-
-        // Handle search action from keyboard
         edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -110,26 +93,22 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void performSearch(String query) {
         if (!query.isEmpty()) {
-            // TODO: Implement actual search functionality
-            // For now, we'll just show some sample results
-            List<Book> searchResults = getSampleSearchResults(query);
-            bookAdapter.updateBooks(searchResults);
+            List<com.example.myapplication.model.Booklinh> searchResults = getSampleSearchResults(query);
+            bookAdapterlinh.updateBooks(searchResults);
             tvResultsCount.setText("Kết quả tìm kiếm (" + searchResults.size() + ")");
         }
     }
 
-    private List<Book> getSampleSearchResults(String query) {
-        List<Book> results = new ArrayList<>();
-        // Add sample books based on the query
-        // This is just for demonstration
+    private List<com.example.myapplication.model.Booklinh> getSampleSearchResults(String query) {
+        List<com.example.myapplication.model.Booklinh> results = new ArrayList<>();
         if (query.toLowerCase().contains("saga")) {
-            results.add(new Book("1", "Saga", "url1", "Featured"));
+            results.add(new com.example.myapplication.model.Booklinh("1", "Saga", "url1", "Featured"));
         }
         if (query.toLowerCase().contains("cam")) {
-            results.add(new Book("2", "Cây cam ngọt của tôi", "url2", "Featured"));
+            results.add(new com.example.myapplication.model.Booklinh("2", "Cây cam ngọt của tôi", "url2", "Featured"));
         }
         if (query.toLowerCase().contains("niên thiếu")) {
-            results.add(new Book("3", "Thời niên thiếu của anh và em", "url3", "Featured"));
+            results.add(new com.example.myapplication.model.Booklinh("3", "Thời niên thiếu của anh và em", "url3", "Featured"));
         }
         return results;
     }

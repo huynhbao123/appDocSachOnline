@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivitybao extends AppCompatActivity {
     private TextView contentText;
     private TextView chapterTitleText;
     private ScrollView scrollView;
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int scrollPosition = scrollView.getScrollY();
                 addBookmark(currentChapter, scrollPosition);
-                Toast.makeText(MainActivity.this, "Đã lưu vị trí đọc", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivitybao.this, "Đã lưu vị trí đọc", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -224,10 +224,10 @@ public class MainActivity extends AppCompatActivity {
 
                 // Hiển thị danh sách bookmarks
                 List<Bookmark> bookmarks = getBookmarks();
-                BookmarkAdapter bookmarkAdapter = new BookmarkAdapter(MainActivity.this, bookmarks);
+                BookmarkAdapter bookmarkAdapter = new BookmarkAdapter(MainActivitybao.this, bookmarks);
                 bookmarkListView.setAdapter(bookmarkAdapter);
 
-                Toast.makeText(MainActivity.this, "Danh sách vị trí đã lưu", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivitybao.this, "Danh sách vị trí đã lưu", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -263,9 +263,9 @@ public class MainActivity extends AppCompatActivity {
                     currentChapter--;
                     updateChapterContent();
                     scrollView.scrollTo(0, 0);
-                    Toast.makeText(MainActivity.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivitybao.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, "Đây là chương đầu tiên", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivitybao.this, "Đây là chương đầu tiên", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -288,9 +288,9 @@ public class MainActivity extends AppCompatActivity {
                     currentChapter++;
                     updateChapterContent();
                     scrollView.scrollTo(0, 0);
-                    Toast.makeText(MainActivity.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivitybao.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, "Đây là chương cuối cùng", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivitybao.this, "Đây là chương cuối cùng", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Nút Home được nhấn", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivitybao.this, "Nút Home được nhấn", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                 updateChapterContent();
                 scrollView.scrollTo(0, 0);
                 toggleBookmarkPanel();
-                Toast.makeText(MainActivity.this, chapterTitles[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivitybao.this, chapterTitles[position], Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 toggleSavedPositionsPanel();
-                Toast.makeText(MainActivity.this, "Đã chuyển đến vị trí: Chương " + currentChapter, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivitybao.this, "Đã chuyển đến vị trí: Chương " + currentChapter, Toast.LENGTH_SHORT).show();
             }
         });
 

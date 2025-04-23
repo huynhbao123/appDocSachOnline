@@ -1,12 +1,12 @@
 package com.example.myapplication.model;
 
-public class Category {
+public class Categorylinh {
     private String id;
     private String name;
     private String imageUrl;
     private int bookCount;
 
-    public Category(String id, String name, String imageUrl, int bookCount) {
+    public Categorylinh(String id, String name, String imageUrl, int bookCount) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;

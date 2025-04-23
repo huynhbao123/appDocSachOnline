@@ -16,7 +16,7 @@ import com.example.myapplication.BookDetailActivity;
 import com.example.myapplication.TrangChu;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.PopularBookAdapter;
-import com.example.myapplication.model.Book;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,11 +45,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        // Set up grid layout with 2 columns
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         popularBooksRecyclerView.setLayoutManager(layoutManager);
 
-        // Create and set adapter
         popularBookAdapter = new PopularBookAdapter(getPopularBooks());
         popularBookAdapter.setOnItemClickListener(book -> {
             Intent intent = new Intent(SearchActivity.this, BookDetailActivity.class);
@@ -61,7 +59,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Back button click
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(SearchActivity.this, TrangChu.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -69,21 +66,18 @@ public class SearchActivity extends AppCompatActivity {
             finish();
         });
 
-        // Search button click
-
         btnSearch.setOnClickListener(v -> {
             String query = edtSearch.getText().toString().trim();
 
             if (!query.isEmpty()) {
                 Intent intent = new Intent(SearchActivity.this, SearchResultsActivity.class);
-                intent.putExtra("search_query", query);  // Gửi dữ liệu tìm kiếm
+                intent.putExtra("search_query", query);
                 startActivity(intent);
             } else {
                 Toast.makeText(SearchActivity.this, "Vui lòng nhập từ khóa tìm kiếm!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Handle search action from keyboard
         edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -97,22 +91,20 @@ public class SearchActivity extends AppCompatActivity {
     private void performSearch() {
         String query = edtSearch.getText().toString().trim();
         if (!query.isEmpty()) {
-            // TODO: Implement search functionality
-            // For now, just show a message or navigate to results
-            Intent intent = new Intent(this, SearchActivity.class);
-            intent.putExtra("query", query);
+            Intent intent = new Intent(this, SearchResultsActivity.class);
+            intent.putExtra("search_query", query);
             startActivity(intent);
         }
     }
 
-    private List<Book> getPopularBooks() {
-        List<Book> books = new ArrayList<>();
-        books.add(new Book("1", "Saga", "url1", "Featured"));
-        books.add(new Book("2", "Cây cam ngọt của tôi", "url2", "Featured"));
-        books.add(new Book("3", "Thời niên thiếu của anh và em", "url3", "Featured"));
-        books.add(new Book("4", "Hạnh trình của thằng năm", "url4", "Featured"));
-        books.add(new Book("5", "Cảm ơn anh đã rời xa tôi", "url5", "Featured"));
-        books.add(new Book("6", "Tôi thấy hoa vàng trên cỏ xanh", "url6", "Featured"));
-        return books;
+    private List<com.example.myapplication.model.Booklinh> getPopularBooks() {
+        List<com.example.myapplication.model.Booklinh> booklinhs = new ArrayList<>();
+        booklinhs.add(new com.example.myapplication.model.Booklinh("1", "Saga", "url1", "Featured"));
+        booklinhs.add(new com.example.myapplication.model.Booklinh("2", "Cây cam ngọt của tôi", "url2", "Featured"));
+        booklinhs.add(new com.example.myapplication.model.Booklinh("3", "Thời niên thiếu của anh và em", "url3", "Featured"));
+        booklinhs.add(new com.example.myapplication.model.Booklinh("4", "Hạnh trình của thằng năm", "url4", "Featured"));
+        booklinhs.add(new com.example.myapplication.model.Booklinh("5", "Cảm ơn anh đã rời xa tôi", "url5", "Featured"));
+        booklinhs.add(new com.example.myapplication.model.Booklinh("6", "Tôi thấy hoa vàng trên cỏ xanh", "url6", "Featured"));
+        return booklinhs;
     }
 }

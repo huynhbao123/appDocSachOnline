@@ -8,19 +8,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
-import com.example.myapplication.model.Book;
+
 import java.util.List;
 
 public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.ViewHolder> {
-    private List<Book> books;
+    private List<com.example.myapplication.model.Booklinh> booklinhs;
     private OnItemClickListener listener;
 
-    public PopularBookAdapter(List<Book> books) {
-        this.books = books;
+    public PopularBookAdapter(List<com.example.myapplication.model.Booklinh> booklinhs) {
+        this.booklinhs = booklinhs;
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Book book);
+        void onItemClick(com.example.myapplication.model.Booklinh booklinh);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -37,13 +37,13 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Book book = books.get(position);
-        holder.bind(book, listener);
+        com.example.myapplication.model.Booklinh booklinh = booklinhs.get(position);
+        holder.bind(booklinh, listener);
     }
 
     @Override
     public int getItemCount() {
-        return books.size();
+        return booklinhs.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -56,17 +56,17 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
             tvTitle = itemView.findViewById(R.id.tvTitle);
         }
 
-        void bind(final Book book, final OnItemClickListener listener) {
+        void bind(final com.example.myapplication.model.Booklinh booklinh, final OnItemClickListener listener) {
             // Set book cover image
             // imgBook.setImageResource(book.getCoverResourceId());
 
             // Set book title
-            tvTitle.setText(book.getTitle());
+            tvTitle.setText(booklinh.getTitle());
 
             // Set click listener
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
-                    listener.onItemClick(book);
+                    listener.onItemClick(booklinh);
                 }
             });
         }
