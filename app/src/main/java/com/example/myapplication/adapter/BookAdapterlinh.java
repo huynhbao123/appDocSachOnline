@@ -17,25 +17,25 @@ import com.example.myapplication.R;
 import java.util.List;
 
 public class BookAdapterlinh extends RecyclerView.Adapter<BookAdapterlinh.BookViewHolder> {
-    private List<com.example.myapplication.model.Booklinh> booklinhs;
+    private List<com.example.myapplication.models.Booklinh> booklinhs;
     private boolean isFeatured;
     private Context context;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(com.example.myapplication.model.Booklinh booklinh);
+        void onItemClick(com.example.myapplication.models.Booklinh booklinh);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public BookAdapterlinh(List<com.example.myapplication.model.Booklinh> booklinhs, boolean isFeatured) {
+    public BookAdapterlinh(List<com.example.myapplication.models.Booklinh> booklinhs, boolean isFeatured) {
         this.booklinhs = booklinhs;
         this.isFeatured = isFeatured;
     }
 
-    public void updateBooks(List<com.example.myapplication.model.Booklinh> newBooklinhs) {
+    public void updateBooks(List<com.example.myapplication.models.Booklinh> newBooklinhs) {
         this.booklinhs = newBooklinhs;
         notifyDataSetChanged();
     }
@@ -57,7 +57,7 @@ public class BookAdapterlinh extends RecyclerView.Adapter<BookAdapterlinh.BookVi
 
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-        com.example.myapplication.model.Booklinh booklinh = booklinhs.get(position);
+        com.example.myapplication.models.Booklinh booklinh = booklinhs.get(position);
 
         // Load book image
         Glide.with(context)

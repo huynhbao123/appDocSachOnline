@@ -12,7 +12,7 @@ import android.view.Gravity;
 
 import com.example.myapplication.CategoryActivitylinh;
 import com.example.myapplication.DangNhap.ChangePasswordActivity;
-import com.example.myapplication.LibraryActivitylinh;
+import com.example.myapplication.LibraryActivity;
 import com.example.myapplication.TrangChu;
 import com.example.myapplication.R;
 
@@ -56,7 +56,7 @@ public class AccountMenuPopup {
 
         // Thư viện đọc
         popupView.findViewById(R.id.tvLibrary).setOnClickListener(v -> {
-            Intent intent = new Intent(context, LibraryActivitylinh.class);
+            Intent intent = new Intent(context, LibraryActivity.class);
             context.startActivity(intent);
             popupWindow.dismiss();
         });
@@ -90,7 +90,6 @@ public class AccountMenuPopup {
 
             popupWindow.dismiss();
         });
-
     }
 
     public void show(View anchorView) {

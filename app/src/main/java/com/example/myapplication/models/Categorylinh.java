@@ -1,4 +1,4 @@
-package com.example.myapplication.model;
+package com.example.myapplication.models;
 
 public class Categorylinh {
     private String id;

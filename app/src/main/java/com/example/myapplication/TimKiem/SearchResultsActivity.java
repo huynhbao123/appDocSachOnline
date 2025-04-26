@@ -93,22 +93,22 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void performSearch(String query) {
         if (!query.isEmpty()) {
-            List<com.example.myapplication.model.Booklinh> searchResults = getSampleSearchResults(query);
+            List<com.example.myapplication.models.Booklinh> searchResults = getSampleSearchResults(query);
             bookAdapterlinh.updateBooks(searchResults);
             tvResultsCount.setText("Kết quả tìm kiếm (" + searchResults.size() + ")");
         }
     }
 
-    private List<com.example.myapplication.model.Booklinh> getSampleSearchResults(String query) {
-        List<com.example.myapplication.model.Booklinh> results = new ArrayList<>();
+    private List<com.example.myapplication.models.Booklinh> getSampleSearchResults(String query) {
+        List<com.example.myapplication.models.Booklinh> results = new ArrayList<>();
         if (query.toLowerCase().contains("saga")) {
-            results.add(new com.example.myapplication.model.Booklinh("1", "Saga", "url1", "Featured"));
+            results.add(new com.example.myapplication.models.Booklinh("1", "Saga", "url1", "Featured"));
         }
         if (query.toLowerCase().contains("cam")) {
-            results.add(new com.example.myapplication.model.Booklinh("2", "Cây cam ngọt của tôi", "url2", "Featured"));
+            results.add(new com.example.myapplication.models.Booklinh("2", "Cây cam ngọt của tôi", "url2", "Featured"));
         }
         if (query.toLowerCase().contains("niên thiếu")) {
-            results.add(new com.example.myapplication.model.Booklinh("3", "Thời niên thiếu của anh và em", "url3", "Featured"));
+            results.add(new com.example.myapplication.models.Booklinh("3", "Thời niên thiếu của anh và em", "url3", "Featured"));
         }
         return results;
     }

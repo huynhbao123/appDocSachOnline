@@ -1,6 +1,6 @@
 package com.example.myapplication;
 
-import com.example.myapplication.model.Book;
+import com.example.myapplication.models.Book;
 
 import java.util.ArrayList;
 import java.util.List;

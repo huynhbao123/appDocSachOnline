@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
-import com.example.myapplication.model.Categorylinh;
+import com.example.myapplication.models.Categorylinh;
 import java.util.List;
 
 public class CategoryAdapterlinh extends RecyclerView.Adapter<CategoryAdapterlinh.CategoryViewHolder> {

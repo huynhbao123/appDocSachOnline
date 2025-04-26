@@ -12,15 +12,15 @@ import com.example.myapplication.R;
 import java.util.List;
 
 public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.ViewHolder> {
-    private List<com.example.myapplication.model.Booklinh> booklinhs;
+    private List<com.example.myapplication.models.Booklinh> booklinhs;
     private OnItemClickListener listener;
 
-    public PopularBookAdapter(List<com.example.myapplication.model.Booklinh> booklinhs) {
+    public PopularBookAdapter(List<com.example.myapplication.models.Booklinh> booklinhs) {
         this.booklinhs = booklinhs;
     }
 
     public interface OnItemClickListener {
-        void onItemClick(com.example.myapplication.model.Booklinh booklinh);
+        void onItemClick(com.example.myapplication.models.Booklinh booklinh);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -37,7 +37,7 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        com.example.myapplication.model.Booklinh booklinh = booklinhs.get(position);
+        com.example.myapplication.models.Booklinh booklinh = booklinhs.get(position);
         holder.bind(booklinh, listener);
     }
 
@@ -56,7 +56,7 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
             tvTitle = itemView.findViewById(R.id.tvTitle);
         }
 
-        void bind(final com.example.myapplication.model.Booklinh booklinh, final OnItemClickListener listener) {
+        void bind(final com.example.myapplication.models.Booklinh booklinh, final OnItemClickListener listener) {
             // Set book cover image
             // imgBook.setImageResource(book.getCoverResourceId());
 

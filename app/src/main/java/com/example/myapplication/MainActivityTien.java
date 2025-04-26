@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.adapter.CategoryAdapter;
-import com.example.myapplication.model.Book;
-import com.example.myapplication.model.Category;
+import com.example.myapplication.models.Book;
+import com.example.myapplication.models.Category;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -37,40 +37,34 @@ public class MainActivityTien extends AppCompatActivity {
         BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setSelectedItemId(R.id.navigation_home);
         bottomNavigation.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_home) {
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_home) {
                 return true;
-            } else if (item.getItemId() == R.id.navigation_menu) {
+            } else if (itemId == R.id.navigation_menu) {
                 startActivity(new Intent(this, LibraryActivity.class));
                 finish();
                 return true;
+
             }
             return false;
         });
+
         LibraryManager libraryManager = LibraryManager.getInstance();
-        // Thêm 6 sách vào Danh sách đọc
+        // Thêm 6 sách vào Danh sách đọc (không trùng lặp)
         libraryManager.addToReadingList(new Book("1", "Trăm Năm Cô Đơn", R.drawable.book_tram_nam_co_don));
         libraryManager.addToReadingList(new Book("2", "Sông Đông Êm Đềm", R.drawable.book_song_dong_em_dem));
         libraryManager.addToReadingList(new Book("3", "Không Gia Đình", R.drawable.book_khong_gia_dinh));
         libraryManager.addToReadingList(new Book("10", "Nhà Giả Kim", R.drawable.book_nha_gia_kim));
         libraryManager.addToReadingList(new Book("4", "Bí Quyết Phát Triển", R.drawable.book_bi_quyet_phat_trien));
         libraryManager.addToReadingList(new Book("5", "Kinh Doanh Online", R.drawable.book_kinh_doanh_online));
-        libraryManager.addToReadingList(new Book("10", "Nhà Giả Kim", R.drawable.book_nha_gia_kim));
-        libraryManager.addToReadingList(new Book("4", "Bí Quyết Phát Triển", R.drawable.book_bi_quyet_phat_trien));
-        libraryManager.addToReadingList(new Book("5", "Kinh Doanh Online", R.drawable.book_kinh_doanh_online));
 
-        // Thêm 6 sách vào Danh sách yêu thích
+        // Thêm 6 sách vào Danh sách yêu thích (không trùng lặp)
         libraryManager.addToFavorites(new Book("6", "Khởi Nghiệp", R.drawable.book_khoi_nghiep));
         libraryManager.addToFavorites(new Book("7", "Tình Yêu Đầu Đời", R.drawable.book_tinh_yeu_dau_doi));
         libraryManager.addToFavorites(new Book("8", "Mùa Hè Năm Ấy", R.drawable.book_mua_he_nam_ay));
         libraryManager.addToFavorites(new Book("9", "Lá Thư Tình", R.drawable.book_la_thu_tinh));
-        libraryManager.addToFavorites(new Book("1", "Trăm Năm Cô Đơn", R.drawable.book_tram_nam_co_don)); // Tái sử dụng
-        libraryManager.addToFavorites(new Book("2", "Sông Đông Êm Đềm", R.drawable.book_song_dong_em_dem));// Tái sử dụng
-        libraryManager.addToFavorites(new Book("9", "Lá Thư Tình", R.drawable.book_la_thu_tinh));
-        libraryManager.addToFavorites(new Book("1", "Trăm Năm Cô Đơn", R.drawable.book_tram_nam_co_don)); // Tái sử dụng
+        libraryManager.addToFavorites(new Book("1", "Trăm Năm Cô Đơn", R.drawable.book_tram_nam_co_don));
         libraryManager.addToFavorites(new Book("2", "Sông Đông Êm Đềm", R.drawable.book_song_dong_em_dem));
-        libraryManager.addToReadingList(new Book("10", "Nhà Giả Kim", R.drawable.book_nha_gia_kim));
-        libraryManager.addToReadingList(new Book("4", "Bí Quyết Phát Triển", R.drawable.book_bi_quyet_phat_trien));
-        libraryManager.addToReadingList(new Book("5", "Kinh Doanh Online", R.drawable.book_kinh_doanh_online));
     }
 
     private void setupCategories() {
@@ -112,7 +106,12 @@ public class MainActivityTien extends AppCompatActivity {
 
             @Override
             public void onBookClick(Category category, int bookPosition) {
-                // Handle book click
+                Book book = category.getBooks().get(bookPosition);
+                Intent intent = new Intent(MainActivityTien.this, BookDetailActivity.class);
+                intent.putExtra("bookId", book.getId());
+                intent.putExtra("bookTitle", book.getTitle());
+                intent.putExtra("coverResourceId", book.getCoverResourceId());
+                startActivity(intent);
             }
         });
 

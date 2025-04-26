@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
@@ -24,7 +25,11 @@ public class FavoritesActivity extends AppCompatActivity {
 
         LibraryManager libraryManager = LibraryManager.getInstance();
         BookAdapter bookAdapter = new BookAdapter(libraryManager.getFavoritesList(), book -> {
-            // Handle book click (e.g., open book details)
+            Intent intent = new Intent(FavoritesActivity.this, BookDetailActivity.class);
+            intent.putExtra("bookId", book.getId());
+            intent.putExtra("bookTitle", book.getTitle());
+            intent.putExtra("coverResourceId", book.getCoverResourceId());
+            startActivity(intent);
         });
         favoritesRecyclerView.setAdapter(bookAdapter);
     }

@@ -97,14 +97,14 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    private List<com.example.myapplication.model.Booklinh> getPopularBooks() {
-        List<com.example.myapplication.model.Booklinh> booklinhs = new ArrayList<>();
-        booklinhs.add(new com.example.myapplication.model.Booklinh("1", "Saga", "url1", "Featured"));
-        booklinhs.add(new com.example.myapplication.model.Booklinh("2", "Cây cam ngọt của tôi", "url2", "Featured"));
-        booklinhs.add(new com.example.myapplication.model.Booklinh("3", "Thời niên thiếu của anh và em", "url3", "Featured"));
-        booklinhs.add(new com.example.myapplication.model.Booklinh("4", "Hạnh trình của thằng năm", "url4", "Featured"));
-        booklinhs.add(new com.example.myapplication.model.Booklinh("5", "Cảm ơn anh đã rời xa tôi", "url5", "Featured"));
-        booklinhs.add(new com.example.myapplication.model.Booklinh("6", "Tôi thấy hoa vàng trên cỏ xanh", "url6", "Featured"));
+    private List<com.example.myapplication.models.Booklinh> getPopularBooks() {
+        List<com.example.myapplication.models.Booklinh> booklinhs = new ArrayList<>();
+        booklinhs.add(new com.example.myapplication.models.Booklinh("1", "Saga", "url1", "Featured"));
+        booklinhs.add(new com.example.myapplication.models.Booklinh("2", "Cây cam ngọt của tôi", "url2", "Featured"));
+        booklinhs.add(new com.example.myapplication.models.Booklinh("3", "Thời niên thiếu của anh và em", "url3", "Featured"));
+        booklinhs.add(new com.example.myapplication.models.Booklinh("4", "Hạnh trình của thằng năm", "url4", "Featured"));
+        booklinhs.add(new com.example.myapplication.models.Booklinh("5", "Cảm ơn anh đã rời xa tôi", "url5", "Featured"));
+        booklinhs.add(new com.example.myapplication.models.Booklinh("6", "Tôi thấy hoa vàng trên cỏ xanh", "url6", "Featured"));
         return booklinhs;
     }
 }

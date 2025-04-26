@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.adapter.BookAdapter;
-import com.example.myapplication.model.Book;
+import com.example.myapplication.models.Book;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -74,7 +74,11 @@ public class CategoryDetailActivity extends AppCompatActivity {
         }
 
         bookAdapter = new BookAdapter(books, book -> {
-            // Handle book click
+            Intent intent = new Intent(CategoryDetailActivity.this, BookDetailActivity.class);
+            intent.putExtra("bookId", book.getId());
+            intent.putExtra("bookTitle", book.getTitle());
+            intent.putExtra("coverResourceId", book.getCoverResourceId());
+            startActivity(intent);
         });
         booksGrid.setAdapter(bookAdapter);
     }

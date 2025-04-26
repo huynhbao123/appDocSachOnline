@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.DangNhap.LoginActivity;
 import com.example.myapplication.ThongTinCaNhan.AccountMenuPopup;
 import com.example.myapplication.TimKiem.SearchActivity;
-import com.example.myapplication.adapter.BookAdapterlinh;
+import com.example.myapplication.adapter.BookAdapter;
+import com.example.myapplication.models.Book;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +148,7 @@ public class TrangChu extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.navigation_library) {
                     if (isLoggedIn()) {
-                        Intent intent = new Intent(TrangChu.this, LibraryActivitylinh.class);
+                        Intent intent = new Intent(TrangChu.this, LibraryActivity.class);
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(TrangChu.this, LoginActivity.class);
@@ -163,20 +164,20 @@ public class TrangChu extends AppCompatActivity {
     private void setupFeaturedBooks() {
         if (featuredBooksRecyclerView == null) return;
 
-        List<com.example.myapplication.model.Booklinh> featuredBooklinhs = new ArrayList<>();
-        featuredBooklinhs.add(new com.example.myapplication.model.Booklinh("1", "The Great Gatsby", "https://example.com/gatsby.jpg", "Featured"));
-        featuredBooklinhs.add(new com.example.myapplication.model.Booklinh("2", "1984", "https://example.com/1984.jpg", "Featured"));
-        featuredBooklinhs.add(new com.example.myapplication.model.Booklinh("3", "To Kill a Mockingbird", "https://example.com/mockingbird.jpg", "Featured"));
-        featuredBooklinhs.add(new com.example.myapplication.model.Booklinh("4", "Pride and Prejudice", "https://example.com/pride.jpg", "Featured"));
-        featuredBooklinhs.add(new com.example.myapplication.model.Booklinh("5", "The Hobbit", "https://example.com/hobbit.jpg", "Featured"));
-        featuredBooklinhs.add(new com.example.myapplication.model.Booklinh("6", "Harry Potter", "https://example.com/harry.jpg", "Featured"));
+        List<Book> featuredBooks = new ArrayList<>();
+        featuredBooks.add(new Book("1", "The Great Gatsby", R.drawable.book_tram_nam_co_don));
+        featuredBooks.add(new Book("2", "1984", R.drawable.book_song_dong_em_dem));
+        featuredBooks.add(new Book("3", "To Kill a Mockingbird", R.drawable.book_khong_gia_dinh));
+        featuredBooks.add(new Book("4", "Pride and Prejudice", R.drawable.book_nha_gia_kim));
+        featuredBooks.add(new Book("5", "The Hobbit", R.drawable.book_bi_quyet_phat_trien));
+        featuredBooks.add(new Book("6", "Harry Potter", R.drawable.book_kinh_doanh_online));
 
-        BookAdapterlinh featuredAdapter = new BookAdapterlinh(featuredBooklinhs, true);
-        featuredAdapter.setOnItemClickListener(book -> {
+        BookAdapter featuredAdapter = new BookAdapter(featuredBooks, book -> {
             if (isLoggedIn()) {
                 Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
+                intent.putExtra("coverResourceId", book.getCoverResourceId());
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(TrangChu.this, LoginActivity.class);
@@ -227,20 +228,20 @@ public class TrangChu extends AppCompatActivity {
     private void setupEconomicBooks() {
         if (economicBooksRecyclerView == null) return;
 
-        List<com.example.myapplication.model.Booklinh> economicBooklinhs = new ArrayList<>();
-        economicBooklinhs.add(new com.example.myapplication.model.Booklinh("7", "Rich Dad Poor Dad", "https://example.com/richdad.jpg", "Economic"));
-        economicBooklinhs.add(new com.example.myapplication.model.Booklinh("8", "The Intelligent Investor", "https://example.com/investor.jpg", "Economic"));
-        economicBooklinhs.add(new com.example.myapplication.model.Booklinh("9", "Think and Grow Rich", "https://example.com/think.jpg", "Economic"));
-        economicBooklinhs.add(new com.example.myapplication.model.Booklinh("10", "The Wealth of Nations", "https://example.com/wealth.jpg", "Economic"));
-        economicBooklinhs.add(new com.example.myapplication.model.Booklinh("11", "Capital", "https://example.com/capital.jpg", "Economic"));
-        economicBooklinhs.add(new com.example.myapplication.model.Booklinh("12", "Freakonomics", "https://example.com/freak.jpg", "Economic"));
+        List<Book> economicBooks = new ArrayList<>();
+        economicBooks.add(new Book("7", "Rich Dad Poor Dad", R.drawable.book_khoi_nghiep));
+        economicBooks.add(new Book("8", "The Intelligent Investor", R.drawable.book_tinh_yeu_dau_doi));
+        economicBooks.add(new Book("9", "Think and Grow Rich", R.drawable.book_mua_he_nam_ay));
+        economicBooks.add(new Book("10", "The Wealth of Nations", R.drawable.book_la_thu_tinh));
+        economicBooks.add(new Book("11", "Capital", R.drawable.book_tram_nam_co_don));
+        economicBooks.add(new Book("12", "Freakonomics", R.drawable.book_song_dong_em_dem));
 
-        BookAdapterlinh economicAdapter = new BookAdapterlinh(economicBooklinhs, false);
-        economicAdapter.setOnItemClickListener(book -> {
+        BookAdapter economicAdapter = new BookAdapter(economicBooks, book -> {
             if (isLoggedIn()) {
                 Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
+                intent.putExtra("coverResourceId", book.getCoverResourceId());
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(TrangChu.this, LoginActivity.class);
@@ -253,20 +254,20 @@ public class TrangChu extends AppCompatActivity {
     private void setupEmotionalBooks() {
         if (emotionalBooksRecyclerView == null) return;
 
-        List<com.example.myapplication.model.Booklinh> emotionalBooklinhs = new ArrayList<>();
-        emotionalBooklinhs.add(new com.example.myapplication.model.Booklinh("13", "The Alchemist", "https://example.com/alchemist.jpg", "Emotional"));
-        emotionalBooklinhs.add(new com.example.myapplication.model.Booklinh("14", "The Little Prince", "https://example.com/prince.jpg", "Emotional"));
-        emotionalBooklinhs.add(new com.example.myapplication.model.Booklinh("15", "The Art of Happiness", "https://example.com/happiness.jpg", "Emotional"));
-        emotionalBooklinhs.add(new com.example.myapplication.model.Booklinh("16", "The Power of Now", "https://example.com/now.jpg", "Emotional"));
-        emotionalBooklinhs.add(new com.example.myapplication.model.Booklinh("17", "The Road Less Traveled", "https://example.com/road.jpg", "Emotional"));
-        emotionalBooklinhs.add(new com.example.myapplication.model.Booklinh("18", "Man's Search for Meaning", "https://example.com/meaning.jpg", "Emotional"));
+        List<Book> emotionalBooks = new ArrayList<>();
+        emotionalBooks.add(new Book("13", "The Alchemist", R.drawable.book_khong_gia_dinh));
+        emotionalBooks.add(new Book("14", "The Little Prince", R.drawable.book_nha_gia_kim));
+        emotionalBooks.add(new Book("15", "The Art of Happiness", R.drawable.book_bi_quyet_phat_trien));
+        emotionalBooks.add(new Book("16", "The Power of Now", R.drawable.book_kinh_doanh_online));
+        emotionalBooks.add(new Book("17", "The Road Less Traveled", R.drawable.book_khoi_nghiep));
+        emotionalBooks.add(new Book("18", "Man's Search for Meaning", R.drawable.book_tinh_yeu_dau_doi));
 
-        BookAdapterlinh emotionalAdapter = new BookAdapterlinh(emotionalBooklinhs, false);
-        emotionalAdapter.setOnItemClickListener(book -> {
+        BookAdapter emotionalAdapter = new BookAdapter(emotionalBooks, book -> {
             if (isLoggedIn()) {
                 Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
+                intent.putExtra("coverResourceId", book.getCoverResourceId());
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(TrangChu.this, LoginActivity.class);
@@ -279,20 +280,20 @@ public class TrangChu extends AppCompatActivity {
     private void setupNovelBooks() {
         if (novelBooksRecyclerView == null) return;
 
-        List<com.example.myapplication.model.Booklinh> novelBooklinhs = new ArrayList<>();
-        novelBooklinhs.add(new com.example.myapplication.model.Booklinh("19", "The Catcher in the Rye", "https://example.com/catcher.jpg", "Novel"));
-        novelBooklinhs.add(new com.example.myapplication.model.Booklinh("20", "One Hundred Years of Solitude", "https://example.com/solitude.jpg", "Novel"));
-        novelBooklinhs.add(new com.example.myapplication.model.Booklinh("21", "The Brothers Karamazov", "https://example.com/karamazov.jpg", "Novel"));
-        novelBooklinhs.add(new com.example.myapplication.model.Booklinh("22", "War and Peace", "https://example.com/warpeace.jpg", "Novel"));
-        novelBooklinhs.add(new com.example.myapplication.model.Booklinh("23", "Crime and Punishment", "https://example.com/crime.jpg", "Novel"));
-        novelBooklinhs.add(new com.example.myapplication.model.Booklinh("24", "The Count of Monte Cristo", "https://example.com/montecristo.jpg", "Novel"));
+        List<Book> novelBooks = new ArrayList<>();
+        novelBooks.add(new Book("19", "The Catcher in the Rye", R.drawable.book_mua_he_nam_ay));
+        novelBooks.add(new Book("20", "One Hundred Years of Solitude", R.drawable.book_la_thu_tinh));
+        novelBooks.add(new Book("21", "The Brothers Karamazov", R.drawable.book_tram_nam_co_don));
+        novelBooks.add(new Book("22", "War and Peace", R.drawable.book_song_dong_em_dem));
+        novelBooks.add(new Book("23", "Crime and Punishment", R.drawable.book_khong_gia_dinh));
+        novelBooks.add(new Book("24", "The Count of Monte Cristo", R.drawable.book_nha_gia_kim));
 
-        BookAdapterlinh novelAdapter = new BookAdapterlinh(novelBooklinhs, false);
-        novelAdapter.setOnItemClickListener(book -> {
+        BookAdapter novelAdapter = new BookAdapter(novelBooks, book -> {
             if (isLoggedIn()) {
                 Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
+                intent.putExtra("coverResourceId", book.getCoverResourceId());
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(TrangChu.this, LoginActivity.class);
@@ -305,20 +306,20 @@ public class TrangChu extends AppCompatActivity {
     private void setupHorrorBooks() {
         if (horrorBooksRecyclerView == null) return;
 
-        List<com.example.myapplication.model.Booklinh> horrorBooklinhs = new ArrayList<>();
-        horrorBooklinhs.add(new com.example.myapplication.model.Booklinh("25", "The Shining", "https://example.com/shining.jpg", "Horror"));
-        horrorBooklinhs.add(new com.example.myapplication.model.Booklinh("26", "Dracula", "https://example.com/dracula.jpg", "Horror"));
-        horrorBooklinhs.add(new com.example.myapplication.model.Booklinh("27", "Frankenstein", "https://example.com/frankenstein.jpg", "Horror"));
-        horrorBooklinhs.add(new com.example.myapplication.model.Booklinh("28", "The Exorcist", "https://example.com/exorcist.jpg", "Horror"));
-        horrorBooklinhs.add(new com.example.myapplication.model.Booklinh("29", "It", "https://example.com/it.jpg", "Horror"));
-        horrorBooklinhs.add(new com.example.myapplication.model.Booklinh("30", "The Haunting of Hill House", "https://example.com/hillhouse.jpg", "Horror"));
+        List<Book> horrorBooks = new ArrayList<>();
+        horrorBooks.add(new Book("25", "The Shining", R.drawable.book_bi_quyet_phat_trien));
+        horrorBooks.add(new Book("26", "Dracula", R.drawable.book_kinh_doanh_online));
+        horrorBooks.add(new Book("27", "Frankenstein", R.drawable.book_khoi_nghiep));
+        horrorBooks.add(new Book("28", "The Exorcist", R.drawable.book_tinh_yeu_dau_doi));
+        horrorBooks.add(new Book("29", "It", R.drawable.book_mua_he_nam_ay));
+        horrorBooks.add(new Book("30", "The Haunting of Hill House", R.drawable.book_la_thu_tinh));
 
-        BookAdapterlinh horrorAdapter = new BookAdapterlinh(horrorBooklinhs, false);
-        horrorAdapter.setOnItemClickListener(book -> {
+        BookAdapter horrorAdapter = new BookAdapter(horrorBooks, book -> {
             if (isLoggedIn()) {
                 Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
+                intent.putExtra("coverResourceId", book.getCoverResourceId());
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(TrangChu.this, LoginActivity.class);
@@ -331,20 +332,20 @@ public class TrangChu extends AppCompatActivity {
     private void setupHistoryBooks() {
         if (historyBooksRecyclerView == null) return;
 
-        List<com.example.myapplication.model.Booklinh> historyBooklinhs = new ArrayList<>();
-        historyBooklinhs.add(new com.example.myapplication.model.Booklinh("31", "Sapiens", "https://example.com/sapiens.jpg", "History"));
-        historyBooklinhs.add(new com.example.myapplication.model.Booklinh("32", "Guns, Germs, and Steel", "https://example.com/guns.jpg", "History"));
-        historyBooklinhs.add(new com.example.myapplication.model.Booklinh("33", "A People's History of the United States", "https://example.com/peoples.jpg", "History"));
-        historyBooklinhs.add(new com.example.myapplication.model.Booklinh("34", "The Silk Roads", "https://example.com/silk.jpg", "History"));
-        historyBooklinhs.add(new com.example.myapplication.model.Booklinh("35", "The Rise and Fall of the Third Reich", "https://example.com/reich.jpg", "History"));
-        historyBooklinhs.add(new com.example.myapplication.model.Booklinh("36", "The History of the Ancient World", "https://example.com/ancient.jpg", "History"));
+        List<Book> historyBooks = new ArrayList<>();
+        historyBooks.add(new Book("31", "Sapiens", R.drawable.book_tram_nam_co_don));
+        historyBooks.add(new Book("32", "Guns, Germs, and Steel", R.drawable.book_song_dong_em_dem));
+        historyBooks.add(new Book("33", "A People's History of the United States", R.drawable.book_khong_gia_dinh));
+        historyBooks.add(new Book("34", "The Silk Roads", R.drawable.book_nha_gia_kim));
+        historyBooks.add(new Book("35", "The Rise and Fall of the Third Reich", R.drawable.book_bi_quyet_phat_trien));
+        historyBooks.add(new Book("36", "The History of the Ancient World", R.drawable.book_kinh_doanh_online));
 
-        BookAdapterlinh historyAdapter = new BookAdapterlinh(historyBooklinhs, false);
-        historyAdapter.setOnItemClickListener(book -> {
+        BookAdapter historyAdapter = new BookAdapter(historyBooks, book -> {
             if (isLoggedIn()) {
                 Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
+                intent.putExtra("coverResourceId", book.getCoverResourceId());
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(TrangChu.this, LoginActivity.class);
@@ -357,20 +358,20 @@ public class TrangChu extends AppCompatActivity {
     private void setupScienceBooks() {
         if (scienceBooksRecyclerView == null) return;
 
-        List<com.example.myapplication.model.Booklinh> scienceBooklinhs = new ArrayList<>();
-        scienceBooklinhs.add(new com.example.myapplication.model.Booklinh("37", "A Brief History of Time", "https://example.com/time.jpg", "Science"));
-        scienceBooklinhs.add(new com.example.myapplication.model.Booklinh("38", "The Selfish Gene", "https://example.com/gene.jpg", "Science"));
-        scienceBooklinhs.add(new com.example.myapplication.model.Booklinh("39", "The Origin of Species", "https://example.com/origin.jpg", "Science"));
-        scienceBooklinhs.add(new com.example.myapplication.model.Booklinh("40", "The Elegant Universe", "https://example.com/universe.jpg", "Science"));
-        scienceBooklinhs.add(new com.example.myapplication.model.Booklinh("41", "The Double Helix", "https://example.com/helix.jpg", "Science"));
-        scienceBooklinhs.add(new com.example.myapplication.model.Booklinh("42", "The Emperor's New Mind", "https://example.com/emperor.jpg", "Science"));
+        List<Book> scienceBooks = new ArrayList<>();
+        scienceBooks.add(new Book("37", "A Brief History of Time", R.drawable.book_khoi_nghiep));
+        scienceBooks.add(new Book("38", "The Selfish Gene", R.drawable.book_tinh_yeu_dau_doi));
+        scienceBooks.add(new Book("39", "The Origin of Species", R.drawable.book_mua_he_nam_ay));
+        scienceBooks.add(new Book("40", "The Elegant Universe", R.drawable.book_la_thu_tinh));
+        scienceBooks.add(new Book("41", "The Double Helix", R.drawable.book_tram_nam_co_don));
+        scienceBooks.add(new Book("42", "The Emperor's New Mind", R.drawable.book_song_dong_em_dem));
 
-        BookAdapterlinh scienceAdapter = new BookAdapterlinh(scienceBooklinhs, false);
-        scienceAdapter.setOnItemClickListener(book -> {
+        BookAdapter scienceAdapter = new BookAdapter(scienceBooks, book -> {
             if (isLoggedIn()) {
                 Intent intent = new Intent(TrangChu.this, BookDetailActivity.class);
                 intent.putExtra("bookId", book.getId());
                 intent.putExtra("bookTitle", book.getTitle());
+                intent.putExtra("coverResourceId", book.getCoverResourceId());
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(TrangChu.this, LoginActivity.class);
