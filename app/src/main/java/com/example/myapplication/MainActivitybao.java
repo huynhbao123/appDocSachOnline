@@ -49,6 +49,7 @@ public class MainActivitybao extends AppCompatActivity {
     private boolean isBookmarkPanelVisible = false;
     private boolean isSavedPositionsPanelVisible = false;
     private boolean isCustomizePanelVisible = false;
+    private String bookTitleFromIntent = "Kinh tế số"; // Tiêu đề sách từ Intent
 
     // Mảng tiêu đề các chương
     private String[] chapterTitles = {
@@ -86,8 +87,14 @@ public class MainActivitybao extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_bao);
 
+        // Nhận dữ liệu từ Intent
+        bookTitleFromIntent = getIntent().getStringExtra("book_title");
+        if (bookTitleFromIntent == null || bookTitleFromIntent.isEmpty()) {
+            bookTitleFromIntent = "Kinh tế số"; // Giá trị mặc định nếu không nhận được
+        }
+
         // Khởi tạo SharedPreferences để lưu vị trí đọc
-        preferences = getSharedPreferences("EbookReader", Context.MODE_PRIVATE);
+        preferences = getSharedPreferences("EbookReader_" + bookTitleFromIntent, Context.MODE_PRIVATE);
 
         // Khởi tạo các view
         contentText = findViewById(R.id.contentText);
@@ -135,21 +142,16 @@ public class MainActivitybao extends AppCompatActivity {
         chapterListView.setAdapter(adapter);
 
         // Thiết lập bìa sách và tiêu đề
-        bookCover.setImageResource(android.R.color.holo_blue_dark);
-        bookCoverSaved.setImageResource(android.R.color.holo_blue_dark);
-        bookTitle.setText("Kinh tế số");
-        bookTitleSaved.setText("Kinh tế số");
+        bookCover.setImageResource(R.drawable.book_khoi_nghiep); // Sử dụng hình ảnh có sẵn
+        bookCoverSaved.setImageResource(R.drawable.book_khoi_nghiep); // Sử dụng hình ảnh có sẵn
+        bookTitle.setText(bookTitleFromIntent);
+        bookTitleSaved.setText(bookTitleFromIntent);
 
         // Hiển thị nội dung chương hiện tại
         updateChapterContent();
 
         // Khôi phục vị trí cuộn sau khi nội dung đã được hiển thị
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.scrollTo(0, savedScrollPosition);
-            }
-        });
+        scrollView.post(() -> scrollView.scrollTo(0, savedScrollPosition));
 
         // Thiết lập Spinner cho font chữ
         String[] fonts = {"Times New Roman", "Arial", "Roboto"};
@@ -158,196 +160,159 @@ public class MainActivitybao extends AppCompatActivity {
         fontSpinner.setAdapter(fontAdapter);
 
         // Xử lý sự kiện chạm vào scrollView để đóng các panel
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    // Đóng các panel nếu đang mở
-                    if (isBookmarkPanelVisible) {
-                        toggleBookmarkPanel();
-                    }
-                    if (isSavedPositionsPanelVisible) {
-                        toggleSavedPositionsPanel();
-                    }
-                    if (isCustomizePanelVisible) {
-                        toggleCustomizePanel();
-                    }
+        scrollView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                // Đóng các panel nếu đang mở
+                if (isBookmarkPanelVisible) {
+                    toggleBookmarkPanel();
                 }
-                return false; // Trả về false để scrollView vẫn xử lý sự kiện cuộn bình thường
+                if (isSavedPositionsPanelVisible) {
+                    toggleSavedPositionsPanel();
+                }
+                if (isCustomizePanelVisible) {
+                    toggleCustomizePanel();
+                }
             }
+            return false; // Trả về false để scrollView vẫn xử lý sự kiện cuộn bình thường
         });
 
         // Xử lý sự kiện nút back
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isBookmarkPanelVisible) {
-                    toggleBookmarkPanel();
-                } else if (isSavedPositionsPanelVisible) {
-                    toggleSavedPositionsPanel();
-                } else if (isCustomizePanelVisible) {
-                    toggleCustomizePanel();
-                } else {
-                    finish();
-                }
+        backButton.setOnClickListener(v -> {
+            if (isBookmarkPanelVisible) {
+                toggleBookmarkPanel();
+            } else if (isSavedPositionsPanelVisible) {
+                toggleSavedPositionsPanel();
+            } else if (isCustomizePanelVisible) {
+                toggleCustomizePanel();
+            } else {
+                finish();
             }
         });
 
         // Xử lý sự kiện nút lưu vị trí (trên cùng)
-        savePositionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int scrollPosition = scrollView.getScrollY();
-                addBookmark(currentChapter, scrollPosition);
-                Toast.makeText(MainActivitybao.this, "Đã lưu vị trí đọc", Toast.LENGTH_SHORT).show();
-            }
+        savePositionButton.setOnClickListener(v -> {
+            int scrollPosition = scrollView.getScrollY();
+            addBookmark(currentChapter, scrollPosition);
+            Toast.makeText(MainActivitybao.this, "Đã lưu vị trí đọc", Toast.LENGTH_SHORT).show();
         });
 
         // Xử lý sự kiện nút lưu vị trí (trong bottom navigation)
-        savePositionButtonBottom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Đóng customize panel nếu đang mở
-                if (isCustomizePanelVisible) {
-                    toggleCustomizePanel();
-                }
-
-                // Đóng bookmark panel nếu đang mở
-                if (isBookmarkPanelVisible) {
-                    toggleBookmarkPanel();
-                }
-
-                // Mở saved positions panel và hiển thị danh sách bookmarks
-                if (!isSavedPositionsPanelVisible) {
-                    toggleSavedPositionsPanel();
-                }
-
-                // Hiển thị danh sách bookmarks
-                List<Bookmark> bookmarks = getBookmarks();
-                BookmarkAdapter bookmarkAdapter = new BookmarkAdapter(MainActivitybao.this, bookmarks);
-                bookmarkListView.setAdapter(bookmarkAdapter);
-
-                Toast.makeText(MainActivitybao.this, "Danh sách vị trí đã lưu", Toast.LENGTH_SHORT).show();
+        savePositionButtonBottom.setOnClickListener(v -> {
+            // Đóng customize panel nếu đang mở
+            if (isCustomizePanelVisible) {
+                toggleCustomizePanel();
             }
+
+            // Đóng bookmark panel nếu đang mở
+            if (isBookmarkPanelVisible) {
+                toggleBookmarkPanel();
+            }
+
+            // Mở saved positions panel và hiển thị danh sách bookmarks
+            if (!isSavedPositionsPanelVisible) {
+                toggleSavedPositionsPanel();
+            }
+
+            // Hiển thị danh sách bookmarks
+            List<Bookmark> bookmarks = getBookmarks();
+            BookmarkAdapter bookmarkAdapter = new BookmarkAdapter(MainActivitybao.this, bookmarks);
+            bookmarkListView.setAdapter(bookmarkAdapter);
+
+            Toast.makeText(MainActivitybao.this, "Danh sách vị trí đã lưu", Toast.LENGTH_SHORT).show();
         });
 
         // Xử lý sự kiện nút tùy chỉnh (biểu tượng chữ "A")
-        textSizeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isBookmarkPanelVisible) {
-                    toggleBookmarkPanel();
-                }
-                if (isSavedPositionsPanelVisible) {
-                    toggleSavedPositionsPanel();
-                }
-                toggleCustomizePanel();
+        textSizeButton.setOnClickListener(v -> {
+            if (isBookmarkPanelVisible) {
+                toggleBookmarkPanel();
             }
+            if (isSavedPositionsPanelVisible) {
+                toggleSavedPositionsPanel();
+            }
+            toggleCustomizePanel();
         });
 
         // Xử lý sự kiện nút chương trước
-        prevChapterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isBookmarkPanelVisible) {
-                    toggleBookmarkPanel();
-                }
-                if (isSavedPositionsPanelVisible) {
-                    toggleSavedPositionsPanel();
-                }
-                if (isCustomizePanelVisible) {
-                    toggleCustomizePanel();
-                }
+        prevChapterButton.setOnClickListener(v -> {
+            if (isBookmarkPanelVisible) {
+                toggleBookmarkPanel();
+            }
+            if (isSavedPositionsPanelVisible) {
+                toggleSavedPositionsPanel();
+            }
+            if (isCustomizePanelVisible) {
+                toggleCustomizePanel();
+            }
 
-                if (currentChapter > 1) {
-                    currentChapter--;
-                    updateChapterContent();
-                    scrollView.scrollTo(0, 0);
-                    Toast.makeText(MainActivitybao.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivitybao.this, "Đây là chương đầu tiên", Toast.LENGTH_SHORT).show();
-                }
+            if (currentChapter > 1) {
+                currentChapter--;
+                updateChapterContent();
+                scrollView.scrollTo(0, 0);
+                Toast.makeText(MainActivitybao.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivitybao.this, "Đây là chương đầu tiên", Toast.LENGTH_SHORT).show();
             }
         });
 
         // Xử lý sự kiện nút chương tiếp theo
-        nextChapterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isBookmarkPanelVisible) {
-                    toggleBookmarkPanel();
-                }
-                if (isSavedPositionsPanelVisible) {
-                    toggleSavedPositionsPanel();
-                }
-                if (isCustomizePanelVisible) {
-                    toggleCustomizePanel();
-                }
+        nextChapterButton.setOnClickListener(v -> {
+            if (isBookmarkPanelVisible) {
+                toggleBookmarkPanel();
+            }
+            if (isSavedPositionsPanelVisible) {
+                toggleSavedPositionsPanel();
+            }
+            if (isCustomizePanelVisible) {
+                toggleCustomizePanel();
+            }
 
-                if (currentChapter < TOTAL_CHAPTERS) {
-                    currentChapter++;
-                    updateChapterContent();
-                    scrollView.scrollTo(0, 0);
-                    Toast.makeText(MainActivitybao.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivitybao.this, "Đây là chương cuối cùng", Toast.LENGTH_SHORT).show();
-                }
+            if (currentChapter < TOTAL_CHAPTERS) {
+                currentChapter++;
+                updateChapterContent();
+                scrollView.scrollTo(0, 0);
+                Toast.makeText(MainActivitybao.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivitybao.this, "Đây là chương cuối cùng", Toast.LENGTH_SHORT).show();
             }
         });
 
         // Xử lý sự kiện nút danh sách chương (biểu tượng danh sách)
-        bookmarkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isCustomizePanelVisible) {
-                    toggleCustomizePanel();
-                }
-                if (isSavedPositionsPanelVisible) {
-                    toggleSavedPositionsPanel();
-                }
-                toggleBookmarkPanel();
+        bookmarkButton.setOnClickListener(v -> {
+            if (isCustomizePanelVisible) {
+                toggleCustomizePanel();
             }
+            if (isSavedPositionsPanelVisible) {
+                toggleSavedPositionsPanel();
+            }
+            toggleBookmarkPanel();
         });
 
         // Xử lý sự kiện nút Home
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivitybao.this, "Nút Home được nhấn", Toast.LENGTH_SHORT).show();
-            }
+        homeButton.setOnClickListener(v -> {
+            Toast.makeText(MainActivitybao.this, "Nút Home được nhấn", Toast.LENGTH_SHORT).show();
+            // Có thể thêm logic để quay về TrangChu hoặc màn hình chính
         });
 
         // Xử lý sự kiện khi nhấp vào một chương
-        chapterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentChapter = position + 1;
-                updateChapterContent();
-                scrollView.scrollTo(0, 0);
-                toggleBookmarkPanel();
-                Toast.makeText(MainActivitybao.this, chapterTitles[position], Toast.LENGTH_SHORT).show();
-            }
+        chapterListView.setOnItemClickListener((parent, view, position, id) -> {
+            currentChapter = position + 1;
+            updateChapterContent();
+            scrollView.scrollTo(0, 0);
+            toggleBookmarkPanel();
+            Toast.makeText(MainActivitybao.this, chapterTitles[position], Toast.LENGTH_SHORT).show();
         });
 
         // Xử lý sự kiện khi nhấp vào một bookmark
-        bookmarkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bookmark bookmark = (Bookmark) parent.getItemAtPosition(position);
-                currentChapter = bookmark.getChapter();
-                final int scrollPosition = bookmark.getScrollPosition();
+        bookmarkListView.setOnItemClickListener((parent, view, position, id) -> {
+            Bookmark bookmark = (Bookmark) parent.getItemAtPosition(position);
+            currentChapter = bookmark.getChapter();
+            final int scrollPosition = bookmark.getScrollPosition();
 
-                updateChapterContent();
-                scrollView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollView.scrollTo(0, scrollPosition);
-                    }
-                });
+            updateChapterContent();
+            scrollView.post(() -> scrollView.scrollTo(0, scrollPosition));
 
-                toggleSavedPositionsPanel();
-                Toast.makeText(MainActivitybao.this, "Đã chuyển đến vị trí: Chương " + currentChapter, Toast.LENGTH_SHORT).show();
-            }
+            toggleSavedPositionsPanel();
+            Toast.makeText(MainActivitybao.this, "Đã chuyển đến vị trí: Chương " + currentChapter, Toast.LENGTH_SHORT).show();
         });
 
         // Xử lý sự kiện thay đổi màu nền

@@ -28,9 +28,9 @@
         <activity android:name=".DangNhap.forgotpassActivity" android:exported="false" />
         <activity android:name=".DangNhap.OtpActivity" android:exported="false" />
         <activity android:name=".TimKiem.SearchActivity" android:exported="true" />
-        <activity android:name=".BookDetailActivity" />
-        <activity android:name=".LibraryActivitylinh" />
-        <activity android:name=".TimKiem.SearchResultsActivity" />
+        <activity android:name=".BookDetailActivity" android:exported="false" />
+        <activity android:name=".LibraryActivitylinh" android:exported="false" />
+        <activity android:name=".TimKiem.SearchResultsActivity" android:exported="false" />
         <activity android:name=".ThongTinCaNhan.AccountInfoActivity" android:exported="false" />
         <activity android:name=".DangNhap.ChangePasswordActivity" android:exported="false" />
         <activity android:name=".CategoryActivitylinh" android:exported="false" />
@@ -41,6 +41,14 @@
         <activity android:name=".ReadingListActivity" android:exported="false" />
         <activity android:name=".FavoritesActivity" android:exported="false" />
         <activity android:name=".LibraryActivity" android:exported="false" />
+
+        <!-- Thêm khai báo trước đó -->
+        <activity android:name=".sach.ChiTietSach" android:exported="false" />
+        <activity android:name=".Vietdanhgia.DanhGiaActivity" android:exported="false" />
+        <activity android:name=".Danhsachdanhgia.DanhSachDanhGiaActivity" android:exported="false" />
+
+        <!-- Thêm khai báo cho MainActivitybao -->
+        <activity android:name=".MainActivitybao" android:exported="false" />
 
     </application>
 </manifest>

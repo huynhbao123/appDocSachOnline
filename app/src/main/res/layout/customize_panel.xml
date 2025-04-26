@@ -31,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         android:paddingBottom="8dp">
 
         <View
@@ -88,11 +89,11 @@
         android:layout_height="wrap_content"
         android:paddingBottom="8dp" />
 
-    <!-- Font chữ (cỡ chữ) -->
+    <!-- Cỡ chữ -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Font chữ"
+        android:text="Cỡ chữ"
         android:textSize="14sp"
         android:textColor="#000000"
         android:paddingBottom="4dp" />
@@ -101,6 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         android:paddingBottom="8dp">
 
         <ImageButton
@@ -117,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="16px"
+            android:text="16sp"
             android:textSize="14sp"
             android:textColor="#000000" />
 
@@ -142,7 +144,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <ImageButton
             android:id="@+id/decreaseMarginButton"
@@ -158,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="0px"
+            android:text="0dp"
             android:textSize="14sp"
             android:textColor="#000000" />
 
