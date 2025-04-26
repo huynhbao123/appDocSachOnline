@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="16dp">
+
+    <!-- Biểu tượng mũi tên quay lại -->
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="Quay lại"
+        android:src="@drawable/ic_arrow_back" />
+
+    <!-- Tiêu đề "Đánh giá và nhận xét" -->
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Đánh giá và nhận xét"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+
+        android:layout_marginBottom="16dp" />
+
+    <!-- Thông tin sách (Tên sách và tác giả) -->
+    <LinearLayout
+        android:id="@+id/book_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_text"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <ImageView
+            android:id="@+id/book_cover"
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:contentDescription="Bìa sách"
+            android:src="@drawable/img"
+            android:layout_marginEnd="10dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/book_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mắt biếc"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/book_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nguyễn Nhật Ánh"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Phần đánh giá -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/book_info_layout"
+        android:text="Đánh giá và nhận xét"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <!-- RatingBar để người dùng chọn số sao -->
+    <RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/book_info_layout"
+        android:layout_marginTop="40dp"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:rating="0"
+        android:progressTint="#FFC107"
+        android:secondaryProgressTint="#FFC107"
+        android:layout_marginBottom="16dp" />
+
+    <!-- EditText để nhập nhận xét -->
+    <EditText
+        android:id="@+id/review_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rating_bar"
+        android:hint="Hãy cho chúng mình một vài nhận xét về nội dung góp ý kiến nhé!"
+        android:background="@android:drawable/edit_text"
+        android:padding="10dp"
+        android:minHeight="100dp"
+        android:gravity="top"
+        android:textColor="#000000"
+        android:textColorHint="#888888"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Nút "Gửi" -->
+    <Button
+        android:id="@+id/btn_submit_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/review_comment"
+        android:layout_centerHorizontal="true"
+        android:text="Gửi"
+        android:textColor="#000000"
+        android:backgroundTint="#FDEBEC"
+        android:paddingHorizontal="16dp"
+        android:textSize="14sp" />
+
+</RelativeLayout>
