@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "759618809207",
+    "firebase_url": "https://bookheaven-d2fa2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "bookheaven-d2fa2",
+    "storage_bucket": "bookheaven-d2fa2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:759618809207:android:40a2b7f2a191946369c572",
+        "android_client_info": {
+          "package_name": "com.example.BookHeaven"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuRJ3v-qEIRZK3gzlGrUi3Qh45jmqWFvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

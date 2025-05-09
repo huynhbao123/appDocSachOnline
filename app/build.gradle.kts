@@ -1,13 +1,16 @@
+// Top-level build file using Kotlin DSL
+
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.example.BookHeaven"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.example.BookHeaven"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -25,6 +28,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -42,15 +46,18 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-    // Use Glide for image loading
+    // Glide for image loading
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
-    // Firebase dependencies (from Ngan1)
-    implementation("com.google.firebase:firebase-firestore:24.10.0")
-    implementation("com.google.firebase:firebase-storage:20.3.0")
+    // Firebase dependencies
+    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-database")
+    implementation ("com.squareup.picasso:picasso:2.8")
 
-    // Gson (from stage)
+    // Gson
     implementation(libs.gson)
 
     // Test dependencies

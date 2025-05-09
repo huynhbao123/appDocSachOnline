@@ -1,0 +1,612 @@
+package com.example.BookHeaven;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+public class MainActivitybao extends AppCompatActivity {
+    private static final String TAG = "MainActivitybao";
+    private TextView contentText;
+    private TextView chapterTitleText;
+    private ScrollView scrollView;
+    private LinearLayout bookmarkPanel;
+    private LinearLayout savedPositionsPanel;
+    private LinearLayout customizePanel;
+    private ListView chapterListView;
+    private ListView bookmarkListView;
+    private ImageView bookCover;
+    private ImageView bookCoverSaved;
+    private TextView bookTitle;
+    private TextView bookTitleSaved;
+    private float currentTextSize = 16;
+    private int currentMargin = 0;
+    private int currentChapter = 1;
+    private int totalChapters = 0;
+    private SharedPreferences preferences;
+    private boolean isBookmarkPanelVisible = false;
+    private boolean isSavedPositionsPanelVisible = false;
+    private boolean isCustomizePanelVisible = false;
+    private String bookTitleFromIntent = "Kinh tế số";
+
+    private List<String> chapterTitlesList = new ArrayList<>();
+    private List<String> chapterContentsList = new ArrayList<>();
+    private String coverUrl;
+
+    // Hàm loại bỏ dấu tiếng Việt
+    private String removeDiacritics(String str) {
+        if (str == null) return "";
+        str = str.toLowerCase();
+        Map<String, String> diacriticMap = new HashMap<>();
+        diacriticMap.put("à", "a");
+        diacriticMap.put("á", "a");
+        diacriticMap.put("ả", "a");
+        diacriticMap.put("ã", "a");
+        diacriticMap.put("ạ", "a");
+        diacriticMap.put("ằ", "a");
+        diacriticMap.put("ắ", "a");
+        diacriticMap.put("ẳ", "a");
+        diacriticMap.put("ẵ", "a");
+        diacriticMap.put("ặ", "a");
+        diacriticMap.put("â", "a");
+        diacriticMap.put("ă", "a");
+        diacriticMap.put("è", "e");
+        diacriticMap.put("é", "e");
+        diacriticMap.put("ẻ", "e");
+        diacriticMap.put("ẽ", "e");
+        diacriticMap.put("ẹ", "e");
+        diacriticMap.put("ề", "e");
+        diacriticMap.put("ế", "e");
+        diacriticMap.put("ể", "e");
+        diacriticMap.put("ễ", "e");
+        diacriticMap.put("ệ", "e");
+        diacriticMap.put("ê", "e");
+        diacriticMap.put("ì", "i");
+        diacriticMap.put("í", "i");
+        diacriticMap.put("ỉ", "i");
+        diacriticMap.put("ĩ", "i");
+        diacriticMap.put("ị", "i");
+        diacriticMap.put("ò", "o");
+        diacriticMap.put("ó", "o");
+        diacriticMap.put("ỏ", "o");
+        diacriticMap.put("õ", "o");
+        diacriticMap.put("ọ", "o");
+        diacriticMap.put("ồ", "o");
+        diacriticMap.put("ố", "o");
+        diacriticMap.put("ổ", "o");
+        diacriticMap.put("ỗ", "o");
+        diacriticMap.put("ộ", "o");
+        diacriticMap.put("ơ", "o");
+        diacriticMap.put("ờ", "o");
+        diacriticMap.put("ớ", "o");
+        diacriticMap.put("ở", "o");
+        diacriticMap.put("ỡ", "o");
+        diacriticMap.put("ợ", "o");
+        diacriticMap.put("ù", "u");
+        diacriticMap.put("ú", "u");
+        diacriticMap.put("ủ", "u");
+        diacriticMap.put("ũ", "u");
+        diacriticMap.put("ụ", "u");
+        diacriticMap.put("ừ", "u");
+        diacriticMap.put("ứ", "u");
+        diacriticMap.put("ử", "u");
+        diacriticMap.put("ữ", "u");
+        diacriticMap.put("ự", "u");
+        diacriticMap.put("ư", "u");
+        diacriticMap.put("ỳ", "y");
+        diacriticMap.put("ý", "y");
+        diacriticMap.put("ỷ", "y");
+        diacriticMap.put("ỹ", "y");
+        diacriticMap.put("ỵ", "y");
+        diacriticMap.put("đ", "d");
+
+        StringBuilder result = new StringBuilder(str);
+        for (Map.Entry<String, String> entry : diacriticMap.entrySet()) {
+            result = new StringBuilder(result.toString().replace(entry.getKey(), entry.getValue()));
+        }
+
+        result = new StringBuilder(Pattern.compile("\\p{M}").matcher(
+                java.text.Normalizer.normalize(result.toString(), java.text.Normalizer.Form.NFD)
+        ).replaceAll(""));
+
+        return result.toString().replace(" ", "_");
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_bao);
+
+        bookTitleFromIntent = getIntent().getStringExtra("book_title");
+        if (bookTitleFromIntent == null || bookTitleFromIntent.isEmpty()) {
+            bookTitleFromIntent = "Kinh tế số";
+        }
+
+        String bookKey = removeDiacritics(bookTitleFromIntent);
+        Log.d(TAG, "Book Key: " + bookKey);
+
+        preferences = getSharedPreferences("EbookReader_" + bookTitleFromIntent, Context.MODE_PRIVATE);
+
+        contentText = findViewById(R.id.contentText);
+        chapterTitleText = findViewById(R.id.chapterTitleText);
+        scrollView = findViewById(R.id.scrollView);
+        bookmarkPanel = findViewById(R.id.bookmarkPanel);
+        savedPositionsPanel = findViewById(R.id.savedPositionsPanel);
+        customizePanel = findViewById(R.id.customizePanel);
+        chapterListView = findViewById(R.id.chapterListView);
+        bookmarkListView = findViewById(R.id.bookmarkListView);
+        bookCover = findViewById(R.id.bookCover);
+        bookCoverSaved = findViewById(R.id.bookCoverSaved);
+        bookTitle = findViewById(R.id.bookTitle);
+        bookTitleSaved = findViewById(R.id.bookTitleSaved);
+
+        ImageButton backButton = findViewById(R.id.backButton);
+        ImageButton prevChapterButton = findViewById(R.id.prevChapterButton);
+        ImageButton homeButton = findViewById(R.id.homeButton);
+        ImageButton textSizeButton = findViewById(R.id.textSizeButton);
+        ImageButton bookmarkButton = findViewById(R.id.bookmarkButton);
+        ImageButton savePositionButton = findViewById(R.id.savePositionButton);
+        ImageButton savePositionButtonBottom = findViewById(R.id.savePositionButtonBottom);
+        ImageButton nextChapterButton = findViewById(R.id.nextChapterButton);
+
+        View colorBlack = customizePanel.findViewById(R.id.colorBlack);
+        View colorGreen = customizePanel.findViewById(R.id.colorGreen);
+        View colorYellow = customizePanel.findViewById(R.id.colorYellow);
+        View colorPink = customizePanel.findViewById(R.id.colorPink);
+        View colorBlue = customizePanel.findViewById(R.id.colorBlue);
+        Spinner fontSpinner = customizePanel.findViewById(R.id.fontSpinner);
+        ImageButton decreaseFontSizeButton = customizePanel.findViewById(R.id.decreaseFontSizeButton);
+        TextView fontSizeText = customizePanel.findViewById(R.id.fontSizeText);
+        ImageButton increaseFontSizeButton = customizePanel.findViewById(R.id.increaseFontSizeButton);
+        ImageButton decreaseMarginButton = customizePanel.findViewById(R.id.decreaseMarginButton);
+        TextView marginText = customizePanel.findViewById(R.id.marginText);
+        ImageButton increaseMarginButton = customizePanel.findViewById(R.id.increaseMarginButton);
+
+        currentChapter = preferences.getInt("currentChapter", 1);
+        final int savedScrollPosition = preferences.getInt("scrollPosition", 0);
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true); // Bật offline (tùy chọn)
+
+        DatabaseReference bookRef = FirebaseDatabase.getInstance().getReference("books").child(bookKey);
+        bookRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "onDataChange: snapshot.exists() = " + snapshot.exists());
+                if (snapshot.exists()) {
+                    coverUrl = snapshot.child("coverUrl").getValue(String.class);
+                    Log.d(TAG, "coverUrl: " + coverUrl); // Thêm log để kiểm tra
+                    if (coverUrl != null && !coverUrl.isEmpty()) {
+                        Picasso.get().load(coverUrl).into(bookCover);
+                        Picasso.get().load(coverUrl).into(bookCoverSaved);
+                    } else {
+                        Log.d(TAG, "coverUrl is null or empty, using default image");
+                        bookCover.setImageResource(R.drawable.book_khoi_nghiep);
+                        bookCoverSaved.setImageResource(R.drawable.book_khoi_nghiep);
+                    }
+
+                    String title = snapshot.child("title").getValue(String.class);
+                    if (title != null) {
+                        bookTitle.setText(title);
+                        bookTitleSaved.setText(title);
+                    } else {
+                        bookTitle.setText(bookTitleFromIntent);
+                        bookTitleSaved.setText(bookTitleFromIntent);
+                    }
+
+                    DataSnapshot chaptersSnapshot = snapshot.child("chapters");
+                    chapterTitlesList.clear();
+                    chapterContentsList.clear();
+                    for (DataSnapshot chapter : chaptersSnapshot.getChildren()) {
+                        String chapterTitle = chapter.child("title").getValue(String.class);
+                        String chapterContent = chapter.child("content").getValue(String.class);
+                        if (chapterTitle != null && chapterContent != null) {
+                            chapterTitlesList.add(chapterTitle);
+                            chapterContentsList.add(chapterContent);
+                        }
+                    }
+
+                    totalChapters = chapterTitlesList.size();
+                    Log.d(TAG, "Total chapters: " + totalChapters);
+                    if (totalChapters == 0) {
+                        Toast.makeText(MainActivitybao.this, "Không tìm thấy chương nào", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    ChapterAdapter adapter = new ChapterAdapter(MainActivitybao.this, chapterTitlesList.toArray(new String[0]));
+                    chapterListView.setAdapter(adapter);
+
+                    if (currentChapter > totalChapters) {
+                        currentChapter = 1;
+                    }
+
+                    updateChapterContent();
+                    scrollView.post(() -> scrollView.scrollTo(0, savedScrollPosition));
+                } else {
+                    Toast.makeText(MainActivitybao.this, "Không tìm thấy sách: " + bookTitleFromIntent, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled: " + error.getMessage());
+                Toast.makeText(MainActivitybao.this, "Lỗi tải dữ liệu: " + error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        String[] fonts = {"Times New Roman", "Arial", "Roboto"};
+        ArrayAdapter<String> fontAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fonts);
+        fontAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fontSpinner.setAdapter(fontAdapter);
+        fontSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedFont = fonts[position];
+                Typeface typeface;
+                switch (selectedFont) {
+                    case "Times New Roman":
+                        typeface = Typeface.SERIF;
+                        break;
+                    case "Arial":
+                        typeface = Typeface.SANS_SERIF;
+                        break;
+                    case "Roboto":
+                        typeface = Typeface.create("sans-serif", Typeface.NORMAL);
+                        break;
+                    default:
+                        typeface = Typeface.DEFAULT;
+                        break;
+                }
+                contentText.setTypeface(typeface);
+                chapterTitleText.setTypeface(typeface);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        scrollView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (isBookmarkPanelVisible) toggleBookmarkPanel();
+                if (isSavedPositionsPanelVisible) toggleSavedPositionsPanel();
+                if (isCustomizePanelVisible) toggleCustomizePanel();
+            }
+            return false;
+        });
+
+        backButton.setOnClickListener(v -> {
+            if (isBookmarkPanelVisible) toggleBookmarkPanel();
+            else if (isSavedPositionsPanelVisible) toggleSavedPositionsPanel();
+            else if (isCustomizePanelVisible) toggleCustomizePanel();
+            else finish();
+        });
+
+        savePositionButton.setOnClickListener(v -> {
+            int scrollPosition = scrollView.getScrollY();
+            addBookmark(currentChapter, scrollPosition);
+            Toast.makeText(MainActivitybao.this, "Đã lưu vị trí đọc", Toast.LENGTH_SHORT).show();
+        });
+
+        savePositionButtonBottom.setOnClickListener(v -> {
+            if (isCustomizePanelVisible) toggleCustomizePanel();
+            if (isBookmarkPanelVisible) toggleBookmarkPanel();
+            if (!isSavedPositionsPanelVisible) toggleSavedPositionsPanel();
+            List<Bookmark> bookmarks = getBookmarks();
+            BookmarkAdapter bookmarkAdapter = new BookmarkAdapter(MainActivitybao.this, bookmarks);
+            bookmarkListView.setAdapter(bookmarkAdapter);
+            Toast.makeText(MainActivitybao.this, "Danh sách vị trí đã lưu", Toast.LENGTH_SHORT).show();
+        });
+
+        textSizeButton.setOnClickListener(v -> {
+            if (isBookmarkPanelVisible) toggleBookmarkPanel();
+            if (isSavedPositionsPanelVisible) toggleSavedPositionsPanel();
+            toggleCustomizePanel();
+        });
+
+        prevChapterButton.setOnClickListener(v -> {
+            if (isBookmarkPanelVisible) toggleBookmarkPanel();
+            if (isSavedPositionsPanelVisible) toggleSavedPositionsPanel();
+            if (isCustomizePanelVisible) toggleCustomizePanel();
+            if (chapterTitlesList.isEmpty() || chapterContentsList.isEmpty()) {
+                Toast.makeText(MainActivitybao.this, "Dữ liệu chương chưa tải xong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (currentChapter > 1) {
+                currentChapter--;
+                updateChapterContent();
+                scrollView.scrollTo(0, 0);
+                Toast.makeText(MainActivitybao.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivitybao.this, "Đây là chương đầu tiên", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        nextChapterButton.setOnClickListener(v -> {
+            if (isBookmarkPanelVisible) toggleBookmarkPanel();
+            if (isSavedPositionsPanelVisible) toggleSavedPositionsPanel();
+            if (isCustomizePanelVisible) toggleCustomizePanel();
+            if (chapterTitlesList.isEmpty() || chapterContentsList.isEmpty()) {
+                Toast.makeText(MainActivitybao.this, "Dữ liệu chương chưa tải xong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (currentChapter < totalChapters) {
+                currentChapter++;
+                updateChapterContent();
+                scrollView.scrollTo(0, 0);
+                Toast.makeText(MainActivitybao.this, "Chương " + currentChapter, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivitybao.this, "Đây là chương cuối cùng", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        bookmarkButton.setOnClickListener(v -> {
+            if (isCustomizePanelVisible) toggleCustomizePanel();
+            if (isSavedPositionsPanelVisible) toggleSavedPositionsPanel();
+            toggleBookmarkPanel();
+        });
+
+        homeButton.setOnClickListener(v -> {
+            Toast.makeText(MainActivitybao.this, "Nút Home được nhấn", Toast.LENGTH_SHORT).show();
+        });
+
+        chapterListView.setOnItemClickListener((parent, view, position, id) -> {
+            if (chapterTitlesList.isEmpty() || chapterContentsList.isEmpty()) {
+                Toast.makeText(MainActivitybao.this, "Dữ liệu chương chưa tải xong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (position >= 0 && position < chapterTitlesList.size()) {
+                currentChapter = position + 1;
+                updateChapterContent();
+                scrollView.scrollTo(0, 0);
+                toggleBookmarkPanel();
+                Toast.makeText(MainActivitybao.this, chapterTitlesList.get(position), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivitybao.this, "Chương không hợp lệ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        bookmarkListView.setOnItemClickListener((parent, view, position, id) -> {
+            if (chapterTitlesList.isEmpty() || chapterContentsList.isEmpty()) {
+                Toast.makeText(MainActivitybao.this, "Dữ liệu chương chưa tải xong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Bookmark bookmark = (Bookmark) parent.getItemAtPosition(position);
+            currentChapter = bookmark.getChapter();
+            final int scrollPosition = bookmark.getScrollPosition();
+            if (currentChapter >= 1 && currentChapter <= totalChapters) {
+                updateChapterContent();
+                scrollView.post(() -> scrollView.scrollTo(0, scrollPosition));
+                toggleSavedPositionsPanel();
+                Toast.makeText(MainActivitybao.this, "Đã chuyển đến vị trí: Chương " + currentChapter, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivitybao.this, "Chương không hợp lệ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        colorBlack.setOnClickListener(v -> {
+            scrollView.setBackgroundColor(0xFF000000);
+            contentText.setTextColor(0xFFFFFFFF);
+            chapterTitleText.setTextColor(0xFFFFFFFF);
+        });
+
+        colorGreen.setOnClickListener(v -> {
+            scrollView.setBackgroundColor(0xFF00FF00);
+            contentText.setTextColor(0xFF000000);
+            chapterTitleText.setTextColor(0xFF000000);
+        });
+
+        colorYellow.setOnClickListener(v -> {
+            scrollView.setBackgroundColor(0xFFFFFFCC);
+            contentText.setTextColor(0xFF000000);
+            chapterTitleText.setTextColor(0xFF000000);
+        });
+
+        colorPink.setOnClickListener(v -> {
+            scrollView.setBackgroundColor(0xFFFF99CC);
+            contentText.setTextColor(0xFF000000);
+            chapterTitleText.setTextColor(0xFF000000);
+        });
+
+        colorBlue.setOnClickListener(v -> {
+            scrollView.setBackgroundColor(0xFF99CCFF);
+            contentText.setTextColor(0xFF000000);
+            chapterTitleText.setTextColor(0xFF000000);
+        });
+
+        decreaseFontSizeButton.setOnClickListener(v -> {
+            if (currentTextSize > 12) {
+                currentTextSize -= 2;
+                contentText.setTextSize(currentTextSize);
+                fontSizeText.setText(currentTextSize + "px");
+            }
+        });
+
+        increaseFontSizeButton.setOnClickListener(v -> {
+            if (currentTextSize < 28) {
+                currentTextSize += 2;
+                contentText.setTextSize(currentTextSize);
+                fontSizeText.setText(currentTextSize + "px");
+            }
+        });
+
+        decreaseMarginButton.setOnClickListener(v -> {
+            if (currentMargin > 0) {
+                currentMargin -= 2;
+                contentText.setPadding(currentMargin, 16, currentMargin, 16);
+                marginText.setText(currentMargin + "px");
+            }
+        });
+
+        increaseMarginButton.setOnClickListener(v -> {
+            if (currentMargin < 32) {
+                currentMargin += 2;
+                contentText.setPadding(currentMargin, 16, currentMargin, 16);
+                marginText.setText(currentMargin + "px");
+            }
+        });
+    }
+
+    private class ChapterAdapter extends ArrayAdapter<String> {
+        public ChapterAdapter(Context context, String[] chapters) {
+            super(context, 0, chapters);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.bookmark_item, parent, false);
+            }
+            TextView chapterTitle = convertView.findViewById(R.id.chapterTitle);
+            chapterTitle.setText(getItem(position));
+            if (position == currentChapter - 1) {
+                convertView.setBackgroundColor(0x22000000);
+            } else {
+                convertView.setBackgroundColor(0x00000000);
+            }
+            return convertView;
+        }
+    }
+
+    private class BookmarkAdapter extends ArrayAdapter<Bookmark> {
+        public BookmarkAdapter(Context context, List<Bookmark> bookmarks) {
+            super(context, 0, bookmarks);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.bookmark_item, parent, false);
+            }
+            TextView bookmarkTitle = convertView.findViewById(R.id.chapterTitle);
+            Bookmark bookmark = getItem(position);
+            bookmarkTitle.setText("Chương " + bookmark.getChapter() + " - Vị trí: " + bookmark.getScrollPosition());
+            return convertView;
+        }
+    }
+
+    private List<Bookmark> getBookmarks() {
+        String bookmarksJson = preferences.getString("bookmarks", "[]");
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Bookmark>>() {}.getType();
+        List<Bookmark> bookmarks = gson.fromJson(bookmarksJson, type);
+        return bookmarks != null ? bookmarks : new ArrayList<>();
+    }
+
+    private void saveBookmarks(List<Bookmark> bookmarks) {
+        Gson gson = new Gson();
+        String bookmarksJson = gson.toJson(bookmarks);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("bookmarks", bookmarksJson);
+        editor.apply();
+    }
+
+    private void addBookmark(int chapter, int scrollPosition) {
+        List<Bookmark> bookmarks = getBookmarks();
+        bookmarks.add(new Bookmark(chapter, scrollPosition));
+        saveBookmarks(bookmarks);
+    }
+
+    private void updateChapterContent() {
+        if (chapterTitlesList.isEmpty() || chapterContentsList.isEmpty()) {
+            Toast.makeText(MainActivitybao.this, "Dữ liệu chương chưa tải xong", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (currentChapter < 1 || currentChapter > chapterTitlesList.size()) currentChapter = 1;
+        chapterTitleText.setText(chapterTitlesList.get(currentChapter - 1));
+        contentText.setText(chapterContentsList.get(currentChapter - 1));
+    }
+
+    private void saveReadingPosition() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("currentChapter", currentChapter);
+        editor.putInt("scrollPosition", scrollView.getScrollY());
+        editor.apply();
+    }
+
+    private void toggleBookmarkPanel() {
+        isBookmarkPanelVisible = !isBookmarkPanelVisible;
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int panelWidth = screenWidth / 2;
+        ViewGroup.LayoutParams panelParams = bookmarkPanel.getLayoutParams();
+        panelParams.width = panelWidth;
+        bookmarkPanel.setLayoutParams(panelParams);
+        bookmarkPanel.setVisibility(isBookmarkPanelVisible ? View.VISIBLE : View.GONE);
+        if (isBookmarkPanelVisible && chapterListView.getAdapter() != null) {
+            ((ChapterAdapter) chapterListView.getAdapter()).notifyDataSetChanged();
+        }
+    }
+
+    private void toggleSavedPositionsPanel() {
+        isSavedPositionsPanelVisible = !isSavedPositionsPanelVisible;
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int panelWidth = screenWidth / 2;
+        ViewGroup.LayoutParams panelParams = savedPositionsPanel.getLayoutParams();
+        panelParams.width = panelWidth;
+        savedPositionsPanel.setLayoutParams(panelParams);
+        savedPositionsPanel.setVisibility(isSavedPositionsPanelVisible ? View.VISIBLE : View.GONE);
+    }
+
+    private void toggleCustomizePanel() {
+        isCustomizePanelVisible = !isCustomizePanelVisible;
+        customizePanel.setVisibility(isCustomizePanelVisible ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (isBookmarkPanelVisible) {
+            int screenWidth = getResources().getDisplayMetrics().widthPixels;
+            int panelWidth = screenWidth / 2;
+            ViewGroup.LayoutParams panelParams = bookmarkPanel.getLayoutParams();
+            panelParams.width = panelWidth;
+            bookmarkPanel.setLayoutParams(panelParams);
+        }
+        if (isSavedPositionsPanelVisible) {
+            int screenWidth = getResources().getDisplayMetrics().widthPixels;
+            int panelWidth = screenWidth / 2;
+            ViewGroup.LayoutParams panelParams = savedPositionsPanel.getLayoutParams();
+            panelParams.width = panelWidth;
+            savedPositionsPanel.setLayoutParams(panelParams);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveReadingPosition();
+    }
+}
