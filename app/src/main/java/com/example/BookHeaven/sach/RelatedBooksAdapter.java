@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.BookHeaven.R;
 import com.example.BookHeaven.models.Book;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -34,7 +35,11 @@ public class RelatedBooksAdapter extends RecyclerView.Adapter<RelatedBooksAdapte
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         Book book = books.get(position);
-        holder.bookCover.setImageResource(book.getCoverResourceId());
+        Picasso.get()
+                .load(book.getImageUrl())
+                .placeholder(R.drawable.book_khoi_nghiep)
+                .error(R.drawable.book_tinh_yeu_dau_doi)
+                .into(holder.bookCover);
         holder.bookTitle.setText(book.getTitle());
     }
 
@@ -49,8 +54,8 @@ public class RelatedBooksAdapter extends RecyclerView.Adapter<RelatedBooksAdapte
 
         BookViewHolder(@NonNull View itemView) {
             super(itemView);
-            bookCover = itemView.findViewById(R.id.bookCover); // Sửa thành bookCover
-            bookTitle = itemView.findViewById(R.id.bookTitle); // Sửa thành bookTitle
+            bookCover = itemView.findViewById(R.id.bookCover);
+            bookTitle = itemView.findViewById(R.id.bookTitle);
         }
     }
 }

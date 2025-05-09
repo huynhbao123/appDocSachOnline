@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.BookHeaven.R;
 import com.example.BookHeaven.models.Book;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -37,8 +38,26 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         Book book = books.get(position);
-        holder.bookCover.setImageResource(book.getCoverResourceId());
-        holder.bookTitle.setText(book.getTitle());
+
+        // Hiển thị tiêu đề, kiểm tra null để tránh crash
+        if (book.getTitle() != null) {
+            holder.bookTitle.setText(book.getTitle());
+        } else {
+            holder.bookTitle.setText("Không có tiêu đề");
+        }
+
+        // Tải ảnh từ imageUrl bằng Picasso, xử lý null và lỗi
+        if (book.getImageUrl() != null && !book.getImageUrl().isEmpty()) {
+            Picasso.get()
+                    .load(book.getImageUrl())
+                    .placeholder(R.drawable.ic_profile_placeholder)
+                    .error(R.drawable.ic_profile_placeholder)
+                    .into(holder.bookCover);
+        } else {
+            holder.bookCover.setImageResource(R.drawable.ic_profile_placeholder);
+        }
+
+        // Xử lý sự kiện click
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onBookClick(book);
@@ -48,7 +67,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     @Override
     public int getItemCount() {
-        return books.size();
+        return books != null ? books.size() : 0;
     }
 
     static class BookViewHolder extends RecyclerView.ViewHolder {

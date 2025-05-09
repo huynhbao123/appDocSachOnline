@@ -55,12 +55,12 @@
 
             <!-- Featured Books Section -->
             <LinearLayout
+                android:id="@+id/categoryHeaderLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <!-- Back Button -->
                 <ImageButton
                     android:id="@+id/btnBack"
                     android:layout_width="32dp"
@@ -69,7 +69,6 @@
                     android:contentDescription="Quay lại"
                     android:src="@android:drawable/ic_media_previous" />
 
-                <!-- Search EditText -->
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -78,8 +77,30 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginStart="16dp"/>
-
             </LinearLayout>
+
+            <!-- Featured Books Section -->
+            <TextView
+                android:id="@+id/tvFeaturedCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sách Nổi bật"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFeaturedBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
 
             <!-- Novel Books Section -->
             <TextView
@@ -144,6 +165,75 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRomanceBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
+
+            <!-- Horror Books Section -->
+            <TextView
+                android:id="@+id/tvHorrorCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sách Kinh dị"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHorrorBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
+
+            <!-- History Books Section -->
+            <TextView
+                android:id="@+id/tvHistoryCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sách Lịch sử"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHistoryBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
+
+            <!-- Science Books Section -->
+            <TextView
+                android:id="@+id/tvScienceCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sách Khoa học"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvScienceBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"

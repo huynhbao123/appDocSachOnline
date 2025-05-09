@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,23 +19,19 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import com.example.BookHeaven.models.Book;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 public class MainActivitybao extends AppCompatActivity {
     private static final String TAG = "MainActivitybao";
@@ -66,98 +61,19 @@ public class MainActivitybao extends AppCompatActivity {
     private List<String> chapterContentsList = new ArrayList<>();
     private String coverUrl;
 
-    // Hàm loại bỏ dấu tiếng Việt
-    private String removeDiacritics(String str) {
-        if (str == null) return "";
-        str = str.toLowerCase();
-        Map<String, String> diacriticMap = new HashMap<>();
-        diacriticMap.put("à", "a");
-        diacriticMap.put("á", "a");
-        diacriticMap.put("ả", "a");
-        diacriticMap.put("ã", "a");
-        diacriticMap.put("ạ", "a");
-        diacriticMap.put("ằ", "a");
-        diacriticMap.put("ắ", "a");
-        diacriticMap.put("ẳ", "a");
-        diacriticMap.put("ẵ", "a");
-        diacriticMap.put("ặ", "a");
-        diacriticMap.put("â", "a");
-        diacriticMap.put("ă", "a");
-        diacriticMap.put("è", "e");
-        diacriticMap.put("é", "e");
-        diacriticMap.put("ẻ", "e");
-        diacriticMap.put("ẽ", "e");
-        diacriticMap.put("ẹ", "e");
-        diacriticMap.put("ề", "e");
-        diacriticMap.put("ế", "e");
-        diacriticMap.put("ể", "e");
-        diacriticMap.put("ễ", "e");
-        diacriticMap.put("ệ", "e");
-        diacriticMap.put("ê", "e");
-        diacriticMap.put("ì", "i");
-        diacriticMap.put("í", "i");
-        diacriticMap.put("ỉ", "i");
-        diacriticMap.put("ĩ", "i");
-        diacriticMap.put("ị", "i");
-        diacriticMap.put("ò", "o");
-        diacriticMap.put("ó", "o");
-        diacriticMap.put("ỏ", "o");
-        diacriticMap.put("õ", "o");
-        diacriticMap.put("ọ", "o");
-        diacriticMap.put("ồ", "o");
-        diacriticMap.put("ố", "o");
-        diacriticMap.put("ổ", "o");
-        diacriticMap.put("ỗ", "o");
-        diacriticMap.put("ộ", "o");
-        diacriticMap.put("ơ", "o");
-        diacriticMap.put("ờ", "o");
-        diacriticMap.put("ớ", "o");
-        diacriticMap.put("ở", "o");
-        diacriticMap.put("ỡ", "o");
-        diacriticMap.put("ợ", "o");
-        diacriticMap.put("ù", "u");
-        diacriticMap.put("ú", "u");
-        diacriticMap.put("ủ", "u");
-        diacriticMap.put("ũ", "u");
-        diacriticMap.put("ụ", "u");
-        diacriticMap.put("ừ", "u");
-        diacriticMap.put("ứ", "u");
-        diacriticMap.put("ử", "u");
-        diacriticMap.put("ữ", "u");
-        diacriticMap.put("ự", "u");
-        diacriticMap.put("ư", "u");
-        diacriticMap.put("ỳ", "y");
-        diacriticMap.put("ý", "y");
-        diacriticMap.put("ỷ", "y");
-        diacriticMap.put("ỹ", "y");
-        diacriticMap.put("ỵ", "y");
-        diacriticMap.put("đ", "d");
-
-        StringBuilder result = new StringBuilder(str);
-        for (Map.Entry<String, String> entry : diacriticMap.entrySet()) {
-            result = new StringBuilder(result.toString().replace(entry.getKey(), entry.getValue()));
-        }
-
-        result = new StringBuilder(Pattern.compile("\\p{M}").matcher(
-                java.text.Normalizer.normalize(result.toString(), java.text.Normalizer.Form.NFD)
-        ).replaceAll(""));
-
-        return result.toString().replace(" ", "_");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_bao);
 
-        bookTitleFromIntent = getIntent().getStringExtra("book_title");
-        if (bookTitleFromIntent == null || bookTitleFromIntent.isEmpty()) {
-            bookTitleFromIntent = "Kinh tế số";
+        // Nhận dữ liệu từ Intent
+        Book book = (Book) getIntent().getSerializableExtra("book");
+        if (book == null) {
+            Toast.makeText(this, "Không nhận được dữ liệu sách!", Toast.LENGTH_LONG).show();
+            finish();
+            return;
         }
-
-        String bookKey = removeDiacritics(bookTitleFromIntent);
-        Log.d(TAG, "Book Key: " + bookKey);
-
+        bookTitleFromIntent = book.getTitle();
         preferences = getSharedPreferences("EbookReader_" + bookTitleFromIntent, Context.MODE_PRIVATE);
 
         contentText = findViewById(R.id.contentText);
@@ -198,73 +114,53 @@ public class MainActivitybao extends AppCompatActivity {
         currentChapter = preferences.getInt("currentChapter", 1);
         final int savedScrollPosition = preferences.getInt("scrollPosition", 0);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true); // Bật offline (tùy chọn)
+        // Lấy thông tin từ Book
+        coverUrl = book.getImageUrl();
+        if (coverUrl != null && !coverUrl.isEmpty()) {
+            Picasso.get().load(coverUrl).into(bookCover);
+            Picasso.get().load(coverUrl).into(bookCoverSaved);
+        } else {
+            bookCover.setImageResource(R.drawable.book_khoi_nghiep);
+            bookCoverSaved.setImageResource(R.drawable.book_khoi_nghiep);
+        }
 
-        DatabaseReference bookRef = FirebaseDatabase.getInstance().getReference("books").child(bookKey);
-        bookRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d(TAG, "onDataChange: snapshot.exists() = " + snapshot.exists());
-                if (snapshot.exists()) {
-                    coverUrl = snapshot.child("coverUrl").getValue(String.class);
-                    Log.d(TAG, "coverUrl: " + coverUrl); // Thêm log để kiểm tra
-                    if (coverUrl != null && !coverUrl.isEmpty()) {
-                        Picasso.get().load(coverUrl).into(bookCover);
-                        Picasso.get().load(coverUrl).into(bookCoverSaved);
-                    } else {
-                        Log.d(TAG, "coverUrl is null or empty, using default image");
-                        bookCover.setImageResource(R.drawable.book_khoi_nghiep);
-                        bookCoverSaved.setImageResource(R.drawable.book_khoi_nghiep);
+        bookTitle.setText(bookTitleFromIntent);
+        bookTitleSaved.setText(bookTitleFromIntent);
+
+        // Lấy chapters từ Book (Sửa đổi ở đây)
+        chapterTitlesList.clear();
+        chapterContentsList.clear();
+        List<Book.Chapter> chapters = book.getChapters();
+        if (chapters != null) {
+            for (Book.Chapter chapter : chapters) {
+                if (chapter != null) { // Kiểm tra chapter không null
+                    String chapterTitle = chapter.getTitle();
+                    String chapterContent = chapter.getContent();
+                    if (chapterTitle != null && chapterContent != null) {
+                        chapterTitlesList.add(chapterTitle);
+                        chapterContentsList.add(chapterContent);
                     }
-
-                    String title = snapshot.child("title").getValue(String.class);
-                    if (title != null) {
-                        bookTitle.setText(title);
-                        bookTitleSaved.setText(title);
-                    } else {
-                        bookTitle.setText(bookTitleFromIntent);
-                        bookTitleSaved.setText(bookTitleFromIntent);
-                    }
-
-                    DataSnapshot chaptersSnapshot = snapshot.child("chapters");
-                    chapterTitlesList.clear();
-                    chapterContentsList.clear();
-                    for (DataSnapshot chapter : chaptersSnapshot.getChildren()) {
-                        String chapterTitle = chapter.child("title").getValue(String.class);
-                        String chapterContent = chapter.child("content").getValue(String.class);
-                        if (chapterTitle != null && chapterContent != null) {
-                            chapterTitlesList.add(chapterTitle);
-                            chapterContentsList.add(chapterContent);
-                        }
-                    }
-
-                    totalChapters = chapterTitlesList.size();
-                    Log.d(TAG, "Total chapters: " + totalChapters);
-                    if (totalChapters == 0) {
-                        Toast.makeText(MainActivitybao.this, "Không tìm thấy chương nào", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    ChapterAdapter adapter = new ChapterAdapter(MainActivitybao.this, chapterTitlesList.toArray(new String[0]));
-                    chapterListView.setAdapter(adapter);
-
-                    if (currentChapter > totalChapters) {
-                        currentChapter = 1;
-                    }
-
-                    updateChapterContent();
-                    scrollView.post(() -> scrollView.scrollTo(0, savedScrollPosition));
-                } else {
-                    Toast.makeText(MainActivitybao.this, "Không tìm thấy sách: " + bookTitleFromIntent, Toast.LENGTH_LONG).show();
                 }
             }
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "onCancelled: " + error.getMessage());
-                Toast.makeText(MainActivitybao.this, "Lỗi tải dữ liệu: " + error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+        totalChapters = chapterTitlesList.size();
+        if (totalChapters == 0) {
+            // Thêm chương mặc định nếu không có chapters
+            chapterTitlesList.add("Chương 1");
+            chapterContentsList.add("Không có nội dung chương nào được cung cấp.");
+            totalChapters = 1;
+        }
+
+        ChapterAdapter adapter = new ChapterAdapter(MainActivitybao.this, chapterTitlesList.toArray(new String[0]));
+        chapterListView.setAdapter(adapter);
+
+        if (currentChapter > totalChapters) {
+            currentChapter = 1;
+        }
+
+        updateChapterContent();
+        scrollView.post(() -> scrollView.scrollTo(0, savedScrollPosition));
 
         String[] fonts = {"Times New Roman", "Arial", "Roboto"};
         ArrayAdapter<String> fontAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fonts);

@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.BookHeaven.adapter.BookAdapter;
+import com.example.BookHeaven.models.Book;
+import com.example.BookHeaven.sach.ChiTietSach;
+import com.squareup.picasso.Picasso;
 
 public class ReadingListActivity extends AppCompatActivity {
 
@@ -25,10 +28,8 @@ public class ReadingListActivity extends AppCompatActivity {
 
         LibraryManager libraryManager = LibraryManager.getInstance();
         BookAdapter bookAdapter = new BookAdapter(libraryManager.getReadingList(), book -> {
-            Intent intent = new Intent(ReadingListActivity.this, BookDetailActivity.class);
-            intent.putExtra("bookId", book.getId());
-            intent.putExtra("bookTitle", book.getTitle());
-            intent.putExtra("coverResourceId", book.getCoverResourceId());
+            Intent intent = new Intent(ReadingListActivity.this, ChiTietSach.class);
+            intent.putExtra("book", book);
             startActivity(intent);
         });
         readingListRecyclerView.setAdapter(bookAdapter);

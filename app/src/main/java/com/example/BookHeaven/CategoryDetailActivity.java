@@ -5,13 +5,20 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.BookHeaven.adapter.BookAdapter;
 import com.example.BookHeaven.models.Book;
+import com.example.BookHeaven.sach.ChiTietSach;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +27,7 @@ public class CategoryDetailActivity extends AppCompatActivity {
     private RecyclerView booksGrid;
     private BookAdapter bookAdapter;
     private TextView categoryTitle;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +46,14 @@ public class CategoryDetailActivity extends AppCompatActivity {
         booksGrid = findViewById(R.id.booksGrid);
         booksGrid.setLayoutManager(new GridLayoutManager(this, 2));
 
-        setupBooks(categoryId);
+        setupBottomNavigation();
 
+        // Khởi tạo Firebase
+        databaseReference = FirebaseDatabase.getInstance().getReference("books");
+        loadBooksFromFirebase(categoryId);
+    }
+
+    private void setupBottomNavigation() {
         BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_home) {
@@ -55,31 +69,42 @@ public class CategoryDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void setupBooks(String categoryId) {
-        List<Book> books = new ArrayList<>();
+    private void loadBooksFromFirebase(String categoryId) {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Book> allBooks = new ArrayList<>();
+                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                    Book book = bookSnapshot.getValue(Book.class);
+                    if (book != null) {
+                        allBooks.add(book);
+                    }
+                }
 
-        if (categoryId.equals("1")) { // Sách Tiểu thuyết
-            books.add(new Book("1", "Trăm Năm Cô Đơn", R.drawable.book_tram_nam_co_don));
-            books.add(new Book("2", "Sông Đông Êm Đềm", R.drawable.book_song_dong_em_dem));
-            books.add(new Book("3", "Không Gia Đình", R.drawable.book_khong_gia_dinh));
-            books.add(new Book("10", "Nhà Giả Kim", R.drawable.book_nha_gia_kim));
-        } else if (categoryId.equals("2")) { // Sách Kinh tế
-            books.add(new Book("4", "Bí Quyết Phát Triển", R.drawable.book_bi_quyet_phat_trien));
-            books.add(new Book("5", "Kinh Doanh Online", R.drawable.book_kinh_doanh_online));
-            books.add(new Book("6", "Khởi Nghiệp", R.drawable.book_khoi_nghiep));
-        } else if (categoryId.equals("3")) { // Sách Tình cảm
-            books.add(new Book("7", "Tình Yêu Đầu Đời", R.drawable.book_tinh_yeu_dau_doi));
-            books.add(new Book("8", "Mùa Hè Năm Ấy", R.drawable.book_mua_he_nam_ay));
-            books.add(new Book("9", "Lá Thư Tình", R.drawable.book_la_thu_tinh));
-        }
+                List<Book> filteredBooks = new ArrayList<>();
+                String categoryName = "";
+                if ("1".equals(categoryId)) categoryName = "novel";
+                else if ("2".equals(categoryId)) categoryName = "economic";
+                else if ("3".equals(categoryId)) categoryName = "emotional";
 
-        bookAdapter = new BookAdapter(books, book -> {
-            Intent intent = new Intent(CategoryDetailActivity.this, BookDetailActivity.class);
-            intent.putExtra("bookId", book.getId());
-            intent.putExtra("bookTitle", book.getTitle());
-            intent.putExtra("coverResourceId", book.getCoverResourceId());
-            startActivity(intent);
+                for (Book book : allBooks) {
+                    if (book != null && categoryName.equals(book.getCategory())) {
+                        filteredBooks.add(book);
+                    }
+                }
+
+                bookAdapter = new BookAdapter(filteredBooks, book -> {
+                    Intent intent = new Intent(CategoryDetailActivity.this, ChiTietSach.class);
+                    intent.putExtra("book", book);
+                    startActivity(intent);
+                });
+                booksGrid.setAdapter(bookAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi nếu có
+            }
         });
-        booksGrid.setAdapter(bookAdapter);
     }
 }

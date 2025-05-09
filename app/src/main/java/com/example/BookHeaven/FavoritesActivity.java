@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.BookHeaven.adapter.BookAdapter;
+import com.example.BookHeaven.models.Book;
+import com.example.BookHeaven.sach.ChiTietSach;
 
 public class FavoritesActivity extends AppCompatActivity {
 
@@ -25,10 +27,8 @@ public class FavoritesActivity extends AppCompatActivity {
 
         LibraryManager libraryManager = LibraryManager.getInstance();
         BookAdapter bookAdapter = new BookAdapter(libraryManager.getFavoritesList(), book -> {
-            Intent intent = new Intent(FavoritesActivity.this, BookDetailActivity.class);
-            intent.putExtra("bookId", book.getId());
-            intent.putExtra("bookTitle", book.getTitle());
-            intent.putExtra("coverResourceId", book.getCoverResourceId());
+            Intent intent = new Intent(FavoritesActivity.this, ChiTietSach.class);
+            intent.putExtra("book", book);
             startActivity(intent);
         });
         favoritesRecyclerView.setAdapter(bookAdapter);
