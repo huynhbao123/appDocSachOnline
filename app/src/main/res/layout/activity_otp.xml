@@ -53,7 +53,7 @@
                 />
 
             <EditText
-                android:id="@+id/edtEmailotp"
+                android:id="@+id/edtOtp"
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

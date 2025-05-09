@@ -4,16 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.BookHeaven.TrangChu;
 import com.example.BookHeaven.R;
+import com.example.BookHeaven.TrangChu;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -22,11 +29,15 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView btnBack;
     private TextView tvForgotPassword, tvRegister;
     private SharedPreferences sharedPreferences;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login); // Đảm bảo đây đúng là file bạn gửi
+        setContentView(R.layout.activity_login);
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         // Ánh xạ view
         edtEmail = findViewById(R.id.edtEmail);
@@ -38,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
 
-        // 👇 Sự kiện nút Đăng nhập
+        // Sự kiện nút Đăng nhập
         btnLogin.setOnClickListener(view -> {
             String email = edtEmail.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
@@ -48,32 +59,53 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            // Giả định đăng nhập thành công
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("isLoggedIn", true);
-            editor.apply();
+            // Authenticate with Firebase
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Check if email is verified
+                                if (mAuth.getCurrentUser().isEmailVerified()) {
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putBoolean("isLoggedIn", true);
+                                    editor.apply();
 
-            Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
-            // Quay lại MainActivity
-            Intent intent = new Intent(LoginActivity.this, TrangChu.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+                                    // Navigate to TrangChu
+                                    Intent intent = new Intent(LoginActivity.this, TrangChu.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(LoginActivity.this,
+                                            "Vui lòng xác minh email trước khi đăng nhập",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                // Login failed
+                                Log.e("LoginActivity", "Login failed: ", task.getException());
+                                Toast.makeText(LoginActivity.this,
+                                        task.getException() != null ? task.getException().getMessage() : "Đăng nhập thất bại",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        });
+
+        // Sự kiện nút Quay lại
+        btnBack.setOnClickListener(view -> {
             finish();
         });
 
-        // 👇 Sự kiện nút Quay lại
-        btnBack.setOnClickListener(view -> {
-            finish(); // Quay về màn hình trước (MainActivity)
-        });
-
-        // 👇 Sự kiện "Quên mật khẩu"
+        // Sự kiện "Quên mật khẩu"
         tvForgotPassword.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, forgotpassActivity.class);
             startActivity(intent);
         });
 
-        // 👇 Sự kiện "Đăng ký"
+        // Sự kiện "Đăng ký"
         tvRegister.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
