@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -66,10 +67,20 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Check if email is verified
-                                if (mAuth.getCurrentUser().isEmailVerified()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null && user.isEmailVerified()) {
+                                    // Trích xuất username từ email (phần trước @)
+                                    String username = email.contains("@") ? email.split("@")[0] : email;
+
+                                    // Lưu thông tin vào SharedPreferences
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putBoolean("isLoggedIn", true);
+                                    editor.putString("email", user.getEmail());
+                                    editor.putString("username", username);
                                     editor.apply();
+
+                                    // Log để debug
+                                    Log.d("LoginActivity", "Email: " + user.getEmail() + ", Username: " + username);
 
                                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 

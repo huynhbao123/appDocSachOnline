@@ -23,8 +23,8 @@
             android:contentDescription="Quay lại"
             android:src="@android:drawable/ic_media_previous" />
 
-        <!-- Search EditText -->
-        <EditText
+        <!-- Search AutoCompleteTextView -->
+        <AutoCompleteTextView
             android:id="@+id/edtSearch"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -67,6 +67,14 @@
             android:textStyle="bold"
             android:layout_margin="16dp"/>
 
+        <!-- ProgressBar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
         <!-- Results List -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/searchResultsRecyclerView"
@@ -76,5 +84,4 @@
             android:clipToPadding="false"/>
 
     </LinearLayout>
-
-</LinearLayout> 
+</LinearLayout>

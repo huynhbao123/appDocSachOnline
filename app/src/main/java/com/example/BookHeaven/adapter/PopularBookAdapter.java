@@ -1,44 +1,86 @@
 package com.example.BookHeaven.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.BookHeaven.R;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.BookHeaven.DangNhap.LoginActivity;
+import com.example.BookHeaven.R;
+import com.example.BookHeaven.models.Booklinh;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.ViewHolder> {
-    private List<com.example.BookHeaven.models.Booklinh> booklinhs;
+    private List<Booklinh> booklinhs;
+    private Context context;
     private OnItemClickListener listener;
 
-    public PopularBookAdapter(List<com.example.BookHeaven.models.Booklinh> booklinhs) {
-        this.booklinhs = booklinhs;
-    }
-
     public interface OnItemClickListener {
-        void onItemClick(com.example.BookHeaven.models.Booklinh booklinh);
+        void onItemClick(Booklinh booklinh);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
+    public PopularBookAdapter(List<Booklinh> booklinhs) {
+        this.booklinhs = booklinhs != null ? booklinhs : new ArrayList<>();
+    }
+
+    // Thêm phương thức updateBooks để cập nhật danh sách sách
+    public void updateBooks(List<Booklinh> newBooklinhs) {
+        this.booklinhs = newBooklinhs != null ? newBooklinhs : new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_popular_book, parent, false);
+        context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_book, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        com.example.BookHeaven.models.Booklinh booklinh = booklinhs.get(position);
-        holder.bind(booklinh, listener);
+        Booklinh booklinh = booklinhs.get(position);
+
+        // Load book image using Glide
+        Glide.with(context)
+                .load(booklinh.getImageUrl())
+                .placeholder(android.R.drawable.ic_menu_camera) // Thay bằng R.drawable.book_placeholder khi có
+                .error(android.R.drawable.ic_menu_gallery) // Thay bằng R.drawable.book_error khi có
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.imgBook);
+
+        // Load book title
+        holder.tvTitle.setText(booklinh.getTitle() != null ? booklinh.getTitle() : "Unknown Title");
+
+        // Handle click event
+        holder.itemView.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+            boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+
+            if (isLoggedIn) {
+                if (listener != null) {
+                    listener.onItemClick(booklinh);
+                }
+            } else {
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -54,21 +96,6 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
             super(itemView);
             imgBook = itemView.findViewById(R.id.imgBook);
             tvTitle = itemView.findViewById(R.id.tvTitle);
-        }
-
-        void bind(final com.example.BookHeaven.models.Booklinh booklinh, final OnItemClickListener listener) {
-            // Set book cover image
-            // imgBook.setImageResource(book.getCoverResourceId());
-
-            // Set book title
-            tvTitle.setText(booklinh.getTitle());
-
-            // Set click listener
-            itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onItemClick(booklinh);
-                }
-            });
         }
     }
 }

@@ -34,7 +34,7 @@
         <activity android:name=".LibraryActivitylinh" android:exported="false" />
         <activity android:name=".TimKiem.SearchResultsActivity" android:exported="false" />
         <activity android:name=".ThongTinCaNhan.AccountInfoActivity" android:exported="false" />
-        <activity android:name=".DangNhap.ChangePasswordActivity" android:exported="false" />
+        <activity android:name=".ThongTinCaNhan.ChangePasswordActivity" android:exported="false" />
         <activity android:name=".CategoryActivitylinh" android:exported="false" />
 
         <!-- Tien2 -->

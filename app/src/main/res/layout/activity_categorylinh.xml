@@ -251,7 +251,9 @@
         android:layout_gravity="bottom"
         android:background="#FF6666"
         app:itemIconTint="@android:color/white"
-        app:itemTextColor="@android:color/white"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconSize="50dp"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

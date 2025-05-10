@@ -6,6 +6,10 @@ public class Booklinh {
     private String imageUrl;
     private String category;
 
+    // Constructor rỗng cần thiết cho Firebase
+    public Booklinh() {
+    }
+
     public Booklinh(String id, String title, String imageUrl, String category) {
         this.id = id;
         this.title = title;

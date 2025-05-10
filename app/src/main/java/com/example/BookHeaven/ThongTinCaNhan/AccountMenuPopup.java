@@ -11,7 +11,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Gravity;
 
 import com.example.BookHeaven.CategoryActivitylinh;
-import com.example.BookHeaven.DangNhap.ChangePasswordActivity;
 import com.example.BookHeaven.LibraryActivity;
 import com.example.BookHeaven.TrangChu;
 import com.example.BookHeaven.R;

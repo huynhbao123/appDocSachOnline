@@ -23,8 +23,8 @@
             android:contentDescription="Quay lại"
             android:src="@android:drawable/ic_media_previous" />
 
-        <!-- Search EditText -->
-        <EditText
+        <!-- Search AutoCompleteTextView -->
+        <AutoCompleteTextView
             android:id="@+id/edtSearch"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -50,7 +50,6 @@
             android:src="@drawable/ic_timkiem" />
     </LinearLayout>
 
-
     <!-- Popular Books Section -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,5 +73,4 @@
             android:clipToPadding="false"/>
 
     </LinearLayout>
-
-</LinearLayout> 
+</LinearLayout>
