@@ -28,7 +28,6 @@
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
-
         android:layout_marginBottom="16dp" />
 
     <!-- Thông tin sách (Tên sách và tác giả) -->
@@ -97,9 +96,9 @@
         android:secondaryProgressTint="#FFC107"
         android:layout_marginBottom="16dp" />
 
-    <!-- EditText để nhập nhận xét -->
+    <!-- EditText để nhập nhận xét - ĐÃ SỬA ID -->
     <EditText
-        android:id="@+id/review_comment"
+        android:id="@+id/comment_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rating_bar"
@@ -112,12 +111,12 @@
         android:textColorHint="#888888"
         android:layout_marginBottom="16dp" />
 
-    <!-- Nút "Gửi" -->
+    <!-- Nút "Gửi" - ĐÃ SỬA ID -->
     <Button
-        android:id="@+id/btn_submit_review"
+        android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/review_comment"
+        android:layout_below="@id/comment_edit_text"
         android:layout_centerHorizontal="true"
         android:text="Gửi"
         android:textColor="#000000"

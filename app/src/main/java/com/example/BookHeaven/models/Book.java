@@ -1,9 +1,11 @@
 package com.example.BookHeaven.models;
 
+import com.google.firebase.database.IgnoreExtraProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@IgnoreExtraProperties
 public class Book implements Serializable {
     private String id;
     private String title;
@@ -20,7 +22,7 @@ public class Book implements Serializable {
     private boolean favorites;
     private boolean readingList;
 
-    public static class Chapter implements Serializable { // Thêm Serializable
+    public static class Chapter implements Serializable {
         private String title;
         private String content;
 
@@ -32,7 +34,6 @@ public class Book implements Serializable {
         public void setContent(String content) { this.content = content; }
     }
 
-    // Phần còn lại của lớp Book giữ nguyên
     public Book(String id, String title, String imageUrl, String author, String description,
                 String publicationDate, int pageCount, String views, String likes, float averageRating,
                 String category, List<Chapter> chapters, boolean favorites, boolean readingList) {
@@ -71,7 +72,6 @@ public class Book implements Serializable {
         this.readingList = false;
     }
 
-    // Các getter và setter giữ nguyên
     public String getId() { return id; }
     public String getTitle() { return title; }
     public String getImageUrl() { return imageUrl; }
@@ -94,8 +94,24 @@ public class Book implements Serializable {
     public void setDescription(String description) { this.description = description; }
     public void setPublicationDate(String publicationDate) { this.publicationDate = publicationDate; }
     public void setPageCount(int pageCount) { this.pageCount = pageCount; }
-    public void setViews(String views) { this.views = views; }
-    public void setLikes(String likes) { this.likes = likes; }
+    public void setViews(Object views) {
+        if (views instanceof Number) {
+            this.views = String.valueOf(((Number) views).intValue());
+        } else if (views instanceof String) {
+            this.views = (String) views;
+        } else {
+            this.views = "0";
+        }
+    }
+    public void setLikes(Object likes) {
+        if (likes instanceof Number) {
+            this.likes = String.valueOf(((Number) likes).intValue());
+        } else if (likes instanceof String) {
+            this.likes = (String) likes;
+        } else {
+            this.likes = "0";
+        }
+    }
     public void setAverageRating(Object averageRating) {
         if (averageRating instanceof Number) {
             this.averageRating = ((Number) averageRating).floatValue();
@@ -124,4 +140,21 @@ public class Book implements Serializable {
     }
     public void setFavorites(boolean favorites) { this.favorites = favorites; }
     public void setReadingList(boolean readingList) { this.readingList = readingList; }
+
+    // Add methods to get numeric values for views and likes
+    public int getViewsCount() {
+        try {
+            return Integer.parseInt(views.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    public int getLikesCount() {
+        try {
+            return Integer.parseInt(likes.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
 }

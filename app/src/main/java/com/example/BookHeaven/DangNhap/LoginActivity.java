@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.BookHeaven.LibraryManager;
 import com.example.BookHeaven.R;
 import com.example.BookHeaven.TrangChu;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -84,11 +85,16 @@ public class LoginActivity extends AppCompatActivity {
 
                                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
-                                    // Navigate to TrangChu
+                                    // Chuyển hướng ngay lập tức đến TrangChu
                                     Intent intent = new Intent(LoginActivity.this, TrangChu.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                     finish();
+
+                                    // Tải dữ liệu LibraryManager nền (không chặn UI)
+                                    LibraryManager.getInstance().setOnDataLoadedListener(() -> {
+                                        Log.d("LoginActivity", "Library data loaded successfully");
+                                    });
                                 } else {
                                     Toast.makeText(LoginActivity.this,
                                             "Vui lòng xác minh email trước khi đăng nhập",
