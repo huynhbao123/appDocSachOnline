@@ -30,7 +30,7 @@ public class CategoryActivitylinh extends AppCompatActivity {
             rvHistoryBooks, rvScienceBooks;
     private AccountMenuPopup accountMenuPopup;
     private ImageView avatarImageView;
-    private ImageButton btnBack;
+//    private ImageButton btnBack;
     private LinearLayout categoryHeaderLayout;
     private DatabaseReference databaseReference;
 
@@ -49,10 +49,10 @@ public class CategoryActivitylinh extends AppCompatActivity {
         avatarImageView.setOnClickListener(v -> accountMenuPopup.show(avatarImageView));
 
         categoryHeaderLayout = findViewById(R.id.categoryHeaderLayout);
-        btnBack = findViewById(R.id.btnBack);
+        //btnBack = findViewById(R.id.btnBack);
         categoryHeaderLayout.setVisibility(View.VISIBLE);
 
-        btnBack.setOnClickListener(v -> finish());
+//        btnBack.setOnClickListener(v -> finish());
 
         // Khởi tạo Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("books");
@@ -67,7 +67,7 @@ public class CategoryActivitylinh extends AppCompatActivity {
         rvNovelBooks = findViewById(R.id.rvNovelBooks);
         rvEconomicBooks = findViewById(R.id.rvEconomicBooks);
         rvRomanceBooks = findViewById(R.id.rvRomanceBooks);
-        rvFeaturedBooks = findViewById(R.id.rvFeaturedBooks); // Thêm nếu có
+//        rvFeaturedBooks = findViewById(R.id.rvFeaturedBooks); // Thêm nếu có
         rvHorrorBooks = findViewById(R.id.rvHorrorBooks); // Thêm nếu có
         rvHistoryBooks = findViewById(R.id.rvHistoryBooks); // Thêm nếu có
         rvScienceBooks = findViewById(R.id.rvScienceBooks); // Thêm nếu có
@@ -85,7 +85,7 @@ public class CategoryActivitylinh extends AppCompatActivity {
         rvNovelBooks.setLayoutManager(novelLayoutManager);
         rvEconomicBooks.setLayoutManager(economicLayoutManager);
         rvRomanceBooks.setLayoutManager(romanceLayoutManager);
-        rvFeaturedBooks.setLayoutManager(featuredLayoutManager);
+//        rvFeaturedBooks.setLayoutManager(featuredLayoutManager);
         rvHorrorBooks.setLayoutManager(horrorLayoutManager);
         rvHistoryBooks.setLayoutManager(historyLayoutManager);
         rvScienceBooks.setLayoutManager(scienceLayoutManager);
@@ -127,7 +127,7 @@ public class CategoryActivitylinh extends AppCompatActivity {
                 rvNovelBooks.setAdapter(new BookAdapter(filterBooksByCategory(allBooks, "novel"), CategoryActivitylinh.this::openBookDetail));
                 rvEconomicBooks.setAdapter(new BookAdapter(filterBooksByCategory(allBooks, "economic"), CategoryActivitylinh.this::openBookDetail));
                 rvRomanceBooks.setAdapter(new BookAdapter(filterBooksByCategory(allBooks, "emotional"), CategoryActivitylinh.this::openBookDetail));
-                rvFeaturedBooks.setAdapter(new BookAdapter(filterBooksByCategory(allBooks, "featured"), CategoryActivitylinh.this::openBookDetail));
+//                rvFeaturedBooks.setAdapter(new BookAdapter(filterBooksByCategory(allBooks, "featured"), CategoryActivitylinh.this::openBookDetail));
                 rvHorrorBooks.setAdapter(new BookAdapter(filterBooksByCategory(allBooks, "horror"), CategoryActivitylinh.this::openBookDetail));
                 rvHistoryBooks.setAdapter(new BookAdapter(filterBooksByCategory(allBooks, "history"), CategoryActivitylinh.this::openBookDetail));
                 rvScienceBooks.setAdapter(new BookAdapter(filterBooksByCategory(allBooks, "science"), CategoryActivitylinh.this::openBookDetail));

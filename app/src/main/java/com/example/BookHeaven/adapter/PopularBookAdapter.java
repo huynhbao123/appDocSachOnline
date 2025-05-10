@@ -16,31 +16,31 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.BookHeaven.DangNhap.LoginActivity;
 import com.example.BookHeaven.R;
-import com.example.BookHeaven.models.Booklinh;
+import com.example.BookHeaven.models.Book; // Thay Booklinh bằng Book
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.ViewHolder> {
-    private List<Booklinh> booklinhs;
+    private List<Book> books; // Thay Booklinh bằng Book
     private Context context;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(Booklinh booklinh);
+        void onItemClick(Book book); // Thay Booklinh bằng Book
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public PopularBookAdapter(List<Booklinh> booklinhs) {
-        this.booklinhs = booklinhs != null ? booklinhs : new ArrayList<>();
+    public PopularBookAdapter(List<Book> books) {
+        this.books = books != null ? books : new ArrayList<>(); // Thay Booklinh bằng Book
     }
 
     // Thêm phương thức updateBooks để cập nhật danh sách sách
-    public void updateBooks(List<Booklinh> newBooklinhs) {
-        this.booklinhs = newBooklinhs != null ? newBooklinhs : new ArrayList<>();
+    public void updateBooks(List<Book> newBooks) { // Thay Booklinh bằng Book
+        this.books = newBooks != null ? newBooks : new ArrayList<>();
         notifyDataSetChanged();
     }
 
@@ -54,18 +54,18 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Booklinh booklinh = booklinhs.get(position);
+        Book book = books.get(position); // Thay Booklinh bằng Book
 
         // Load book image using Glide
         Glide.with(context)
-                .load(booklinh.getImageUrl())
+                .load(book.getImageUrl())
                 .placeholder(android.R.drawable.ic_menu_camera) // Thay bằng R.drawable.book_placeholder khi có
                 .error(android.R.drawable.ic_menu_gallery) // Thay bằng R.drawable.book_error khi có
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imgBook);
 
         // Load book title
-        holder.tvTitle.setText(booklinh.getTitle() != null ? booklinh.getTitle() : "Unknown Title");
+        holder.tvTitle.setText(book.getTitle() != null ? book.getTitle() : "Unknown Title");
 
         // Handle click event
         holder.itemView.setOnClickListener(v -> {
@@ -74,7 +74,7 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
 
             if (isLoggedIn) {
                 if (listener != null) {
-                    listener.onItemClick(booklinh);
+                    listener.onItemClick(book); // Thay Booklinh bằng Book
                 }
             } else {
                 Intent intent = new Intent(context, LoginActivity.class);
@@ -85,7 +85,7 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
 
     @Override
     public int getItemCount() {
-        return booklinhs.size();
+        return books.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

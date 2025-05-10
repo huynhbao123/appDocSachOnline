@@ -21,7 +21,8 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Quay lại"
-            android:src="@android:drawable/ic_media_previous" />
+            android:src="@drawable/ic_back"
+            />
 
         <!-- Search AutoCompleteTextView -->
         <AutoCompleteTextView

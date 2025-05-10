@@ -127,7 +127,7 @@ public class TrangChu extends AppCompatActivity {
 
     private void updateAvatar() {
         if (isLoggedIn()) {
-            avatarImageView.setImageResource(R.drawable.avt_login);
+            avatarImageView.setImageResource(R.drawable.avt2);
         } else {
             avatarImageView.setImageResource(R.drawable.ic_profile_placeholder);
         }
