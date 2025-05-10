@@ -3,6 +3,7 @@ package com.example.BookHeaven;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,6 +23,7 @@ public class FavoritesActivity extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
 
+        TextView emptyMessage = findViewById(R.id.emptyMessage);
         RecyclerView favoritesRecyclerView = findViewById(R.id.favoritesRecyclerView);
         favoritesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
@@ -32,5 +34,34 @@ public class FavoritesActivity extends AppCompatActivity {
             startActivity(intent);
         });
         favoritesRecyclerView.setAdapter(bookAdapter);
+
+        // Hiển thị thông báo nếu danh sách rỗng
+        if (libraryManager.getFavoritesList().isEmpty()) {
+            emptyMessage.setVisibility(TextView.VISIBLE);
+            favoritesRecyclerView.setVisibility(RecyclerView.GONE);
+        } else {
+            emptyMessage.setVisibility(TextView.GONE);
+            favoritesRecyclerView.setVisibility(RecyclerView.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Cập nhật lại RecyclerView khi quay lại activity
+        RecyclerView favoritesRecyclerView = findViewById(R.id.favoritesRecyclerView);
+        TextView emptyMessage = findViewById(R.id.emptyMessage);
+        LibraryManager libraryManager = LibraryManager.getInstance();
+        BookAdapter adapter = (BookAdapter) favoritesRecyclerView.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+            if (libraryManager.getFavoritesList().isEmpty()) {
+                emptyMessage.setVisibility(TextView.VISIBLE);
+                favoritesRecyclerView.setVisibility(RecyclerView.GONE);
+            } else {
+                emptyMessage.setVisibility(TextView.GONE);
+                favoritesRecyclerView.setVisibility(RecyclerView.VISIBLE);
+            }
+        }
     }
 }

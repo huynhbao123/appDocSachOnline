@@ -18,6 +18,8 @@ import com.example.BookHeaven.adapter.BookAdapter;
 import com.example.BookHeaven.models.Book;
 import com.example.BookHeaven.sach.ChiTietSach;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -68,6 +70,9 @@ public class TrangChu extends AppCompatActivity {
         historyBooksRecyclerView = findViewById(R.id.historyBooksRecyclerView);
         scienceBooksRecyclerView = findViewById(R.id.scienceBooksRecyclerView);
 
+        // Khởi động LibraryManager để tải dữ liệu sớm
+        LibraryManager.getInstance();
+
         setupLayoutManagers();
         loadBooksFromFirebase();
         setupBottomNavigation();
@@ -87,11 +92,23 @@ public class TrangChu extends AppCompatActivity {
     private boolean isLoggedIn() {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         boolean loggedIn = prefs.getBoolean("isLoggedIn", false);
+
+        // Đồng bộ với FirebaseAuth
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (loggedIn && (user == null || !user.isEmailVerified())) {
+            // Nếu SharedPreferences cho rằng đã đăng nhập nhưng Firebase không có user hoặc email chưa xác minh
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("isLoggedIn", false);
+            editor.apply();
+            loggedIn = false;
+        }
+
         Log.d("MainActivity", "isLoggedIn: " + loggedIn);
         return loggedIn;
     }
 
     private void logout() {
+        FirebaseAuth.getInstance().signOut(); // Đăng xuất Firebase
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("isLoggedIn", false);
