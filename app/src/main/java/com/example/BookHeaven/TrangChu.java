@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +97,6 @@ public class TrangChu extends AppCompatActivity {
         // Đồng bộ với FirebaseAuth
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (loggedIn && (user == null || !user.isEmailVerified())) {
-            // Nếu SharedPreferences cho rằng đã đăng nhập nhưng Firebase không có user hoặc email chưa xác minh
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("isLoggedIn", false);
             editor.apply();
@@ -127,7 +127,7 @@ public class TrangChu extends AppCompatActivity {
 
     private void updateAvatar() {
         if (isLoggedIn()) {
-            avatarImageView.setImageResource(R.drawable.avt2);
+            avatarImageView.setImageResource(R.drawable.avt_login);
         } else {
             avatarImageView.setImageResource(R.drawable.ic_profile_placeholder);
         }
@@ -253,32 +253,37 @@ public class TrangChu extends AppCompatActivity {
                 scienceBooks.clear();
 
                 for (DataSnapshot bookSnapshot : snapshot.getChildren()) {
-                    Book book = bookSnapshot.getValue(Book.class);
-                    if (book != null) {
-                        String category = bookSnapshot.child("category").getValue(String.class);
-                        switch (category != null ? category.toLowerCase() : "") {
-                            case "featured":
-                                featuredBooks.add(book);
-                                break;
-                            case "economic":
-                                economicBooks.add(book);
-                                break;
-                            case "emotional":
-                                emotionalBooks.add(book);
-                                break;
-                            case "novel":
-                                novelBooks.add(book);
-                                break;
-                            case "horror":
-                                horrorBooks.add(book);
-                                break;
-                            case "history":
-                                historyBooks.add(book);
-                                break;
-                            case "science":
-                                scienceBooks.add(book);
-                                break;
+                    try {
+                        Book book = bookSnapshot.getValue(Book.class);
+                        if (book != null) {
+                            String category = bookSnapshot.child("category").getValue(String.class);
+                            Log.d("TrangChu", "Book loaded: " + book.getTitle() + ", Category: " + category + ", Chapters: " + book.getChapters());
+                            switch (category != null ? category.toLowerCase() : "") {
+                                case "featured":
+                                    featuredBooks.add(book);
+                                    break;
+                                case "economic":
+                                    economicBooks.add(book);
+                                    break;
+                                case "emotional":
+                                    emotionalBooks.add(book);
+                                    break;
+                                case "novel":
+                                    novelBooks.add(book);
+                                    break;
+                                case "horror":
+                                    horrorBooks.add(book);
+                                    break;
+                                case "history":
+                                    historyBooks.add(book);
+                                    break;
+                                case "science":
+                                    scienceBooks.add(book);
+                                    break;
+                            }
                         }
+                    } catch (Exception e) {
+                        Log.e("TrangChu", "Error deserializing book: " + e.getMessage());
                     }
                 }
 

@@ -50,16 +50,26 @@ public class ChiTietSach extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("book")) {
             book = (Book) intent.getSerializableExtra("book");
+            Log.d("ChiTietSach", "Book received from Intent: " + book.getTitle() + ", Author: " + book.getAuthor());
         } else if (intent.hasExtra("bookId") && intent.hasExtra("bookTitle") && intent.hasExtra("imageUrl")) {
             String bookId = intent.getStringExtra("bookId");
             String bookTitle = intent.getStringExtra("bookTitle");
             String imageUrl = intent.getStringExtra("imageUrl");
+            String bookAuthor = intent.getStringExtra("bookAuthor"); // Lấy author từ Intent nếu có
             book = new Book(bookId, bookTitle, imageUrl);
+            if (bookAuthor != null && !bookAuthor.trim().isEmpty()) {
+                book.setAuthor(bookAuthor); // Ghi đè author nếu Intent có dữ liệu
+            }
+            Log.d("ChiTietSach", "Book created with minimal data, author set to: " + book.getAuthor());
         } else {
             Toast.makeText(this, "Không nhận được dữ liệu sách!", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
+
+        // Lưu giá trị author ban đầu từ Intent
+        String originalAuthor = book.getAuthor();
+        Log.d("ChiTietSach", "Original author from Intent: " + originalAuthor);
 
         // Gán dữ liệu vào giao diện
         ImageView bookCover = findViewById(R.id.book_cover);
@@ -76,6 +86,8 @@ public class ChiTietSach extends AppCompatActivity {
         Button btnSeeAll = findViewById(R.id.btn_see_all);
         favoriteButton = findViewById(R.id.favoriteButton);
         TextView bookPageCount = findViewById(R.id.book_page_count);
+        TextView authorName = findViewById(R.id.author_name); // Thêm TextView cho tên tác giả
+        TextView authorStats = findViewById(R.id.author_stats); // Thêm TextView cho thống kê tác giả
 
         // Tải hình ảnh từ imageUrl bằng Picasso
         Picasso.get()
@@ -93,14 +105,32 @@ public class ChiTietSach extends AppCompatActivity {
         }
 
         // Nếu book chỉ có id, title, imageUrl, lấy dữ liệu đầy đủ từ Firebase
-        if (book.getAuthor() == null || book.getDescription() == null) {
+        if (book.getAuthor().equals("Unknown Author") || book.getDescription() == null) {
             DatabaseReference bookRef = databaseReference.child(book.getId());
             bookRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        book = snapshot.getValue(Book.class);
-                        if (book != null) {
+                        Book firebaseBook = snapshot.getValue(Book.class);
+                        if (firebaseBook != null) {
+                            // Chỉ cập nhật author nếu chưa có từ Intent và Firebase có giá trị hợp lệ
+                            if (book.getAuthor().equals("Unknown Author") && firebaseBook.getAuthor() != null && !firebaseBook.getAuthor().trim().isEmpty()) {
+                                book.setAuthor(firebaseBook.getAuthor());
+                                Log.d("ChiTietSach", "Updated author from Firebase: " + book.getAuthor());
+                            } else {
+                                book.setAuthor(originalAuthor); // Khôi phục author gốc nếu Firebase không hợp lệ
+                                Log.d("ChiTietSach", "Restored original author: " + originalAuthor + ", Firebase author ignored: " + (firebaseBook != null ? firebaseBook.getAuthor() : "null"));
+                            }
+                            // Cập nhật các trường khác
+                            book.setDescription(firebaseBook.getDescription());
+                            book.setPublicationDate(firebaseBook.getPublicationDate());
+                            book.setPageCount(firebaseBook.getPageCount());
+                            book.setViews(firebaseBook.getViews());
+                            book.setLikes(firebaseBook.getLikes());
+                            book.setAverageRating(firebaseBook.getAverageRating());
+                            book.setCategory(firebaseBook.getCategory());
+                            book.setChapters(firebaseBook.getChapters());
+
                             // Cập nhật giao diện với dữ liệu đầy đủ
                             bookTitle.setText(book.getTitle());
                             bookAuthor.setText("Tác giả: " + (book.getAuthor() != null ? book.getAuthor() : "Không xác định"));
@@ -109,25 +139,45 @@ public class ChiTietSach extends AppCompatActivity {
                             bookPageCount.setText(String.valueOf(book.getPageCount() != 0 ? book.getPageCount() : "Không xác định"));
                             bookDescription.setText(book.getDescription() != null ? book.getDescription() : "Không có mô tả");
                             publicationDate.setText("Ngày xuất bản: " + (book.getPublicationDate() != null ? book.getPublicationDate() : "Không xác định"));
-                            ratingBar.setRating(book.getAverageRating() > 0 ? book.getAverageRating() : 0.0f);
-                            averageRating.setText(String.valueOf(book.getAverageRating() > 0 ? book.getAverageRating() : 0.0));
-                            // Cập nhật trạng thái yêu thích sau khi dữ liệu từ Firebase tải xong
+
+                            // Cập nhật thông tin tác giả
+                            authorName.setText(book.getAuthor() != null ? book.getAuthor() : "Không xác định");
+                            authorStats.setText("Thông tin tác giả đang được cập nhật"); // Placeholder, có thể lấy từ Firebase nếu có
+
+                            // Sửa lỗi NumberFormatException
+                            float roundedRating = 0.0f;
+                            try {
+                                String avgRatingStr = String.valueOf(book.getAverageRating()).replace(",", ".");
+                                Log.d("ChiTietSach", "Raw averageRating from Firebase: " + book.getAverageRating() + ", Converted: " + avgRatingStr);
+                                roundedRating = Float.parseFloat(avgRatingStr);
+                            } catch (NumberFormatException e) {
+                                Log.e("ChiTietSach", "Error parsing averageRating: " + e.getMessage());
+                                roundedRating = 0.0f;
+                            }
+                            ratingBar.setRating(roundedRating > 0 ? roundedRating : 0.0f);
+                            averageRating.setText(String.format("%.1f", roundedRating));
+
+                            // Cập nhật trạng thái yêu thích
                             LibraryManager.getInstance().setOnDataLoadedListener(() -> runOnUiThread(() -> {
                                 boolean isFavorite = LibraryManager.getInstance().isBookFavorite(book.getId());
                                 book.setFavorites(isFavorite);
                                 updateFavoriteButton();
                             }));
 
-                            // Đảm bảo nút đánh giá luôn hiển thị sau khi tải dữ liệu
+                            // Đảm bảo nút đánh giá luôn hiển thị
                             if (reviewLabel != null) {
                                 reviewLabel.setVisibility(View.VISIBLE);
                             }
+
+                            // Tải lại sách liên quan sau khi dữ liệu sách được cập nhật
+                            loadRelatedBooks();
                         }
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("ChiTietSach", "Lỗi tải dữ liệu sách: " + error.getMessage());
                     Toast.makeText(ChiTietSach.this, "Lỗi tải dữ liệu sách: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
@@ -140,20 +190,39 @@ public class ChiTietSach extends AppCompatActivity {
             bookPageCount.setText(String.valueOf(book.getPageCount() != 0 ? book.getPageCount() : "Không xác định"));
             bookDescription.setText(book.getDescription() != null ? book.getDescription() : "Không có mô tả");
             publicationDate.setText("Ngày xuất bản: " + (book.getPublicationDate() != null ? book.getPublicationDate() : "Không xác định"));
-            ratingBar.setRating(book.getAverageRating() > 0 ? book.getAverageRating() : 0.0f);
-            averageRating.setText(String.valueOf(book.getAverageRating() > 0 ? book.getAverageRating() : 0.0));
+
+            // Cập nhật thông tin tác giả
+            authorName.setText(book.getAuthor() != null ? book.getAuthor() : "Không xác định");
+            authorStats.setText("Thông tin tác giả đang được cập nhật"); // Placeholder, có thể lấy từ Firebase nếu có
+
+            // Sửa lỗi NumberFormatException
+            float roundedRating = 0.0f;
+            try {
+                String avgRatingStr = String.valueOf(book.getAverageRating()).replace(",", ".");
+                Log.d("ChiTietSach", "Raw averageRating from Intent: " + book.getAverageRating() + ", Converted: " + avgRatingStr);
+                roundedRating = Float.parseFloat(avgRatingStr);
+            } catch (NumberFormatException e) {
+                Log.e("ChiTietSach", "Error parsing averageRating: " + e.getMessage());
+                roundedRating = 0.0f;
+            }
+            ratingBar.setRating(roundedRating > 0 ? roundedRating : 0.0f);
+            averageRating.setText(String.format("%.1f", roundedRating));
+
             LibraryManager.getInstance().setOnDataLoadedListener(() -> runOnUiThread(() -> {
                 boolean isFavorite = LibraryManager.getInstance().isBookFavorite(book.getId());
                 book.setFavorites(isFavorite);
                 updateFavoriteButton();
             }));
+
+            // Tải sách liên quan
+            loadRelatedBooks();
         }
 
         // Thiết lập RecyclerView cho sách cùng tác giả
         relatedBooksRecyclerView = findViewById(R.id.related_books_recycler_view);
         relatedBooksRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        loadRelatedBooks();
+        relatedBooksAdapter = new RelatedBooksAdapter(this, new ArrayList<>());
+        relatedBooksRecyclerView.setAdapter(relatedBooksAdapter);
 
         // Xử lý sự kiện cho nút "Đọc sách"
         readLabel.setOnClickListener(v -> {
@@ -162,11 +231,8 @@ public class ChiTietSach extends AppCompatActivity {
                 return;
             }
 
-            // Increment view count when user reads the book
             LibraryManager libraryManager = LibraryManager.getInstance();
             libraryManager.incrementBookViews(book);
-
-            // Update the view count in UI
             bookViews.setText(book.getViews());
 
             if (libraryManager.addToReadingList(ChiTietSach.this, book)) {
@@ -179,20 +245,10 @@ public class ChiTietSach extends AppCompatActivity {
         // Xử lý sự kiện cho nút "Đánh giá"
         if (reviewLabel != null) {
             reviewLabel.setOnClickListener(v -> {
-                if (book == null) {
+                if (book == null || book.getId() == null) {
                     Toast.makeText(ChiTietSach.this, "Không tìm thấy dữ liệu sách!", Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                // Đảm bảo rằng book.getId() không null trước khi chuyển đến màn hình đánh giá
-                if (book.getId() == null) {
-                    Toast.makeText(ChiTietSach.this, "Không tìm thấy ID sách!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // Log để debug
-                Log.d("ChiTietSach", "Chuyển đến màn hình đánh giá với bookId: " + book.getId());
-                Log.d("ChiTietSach", "Tiêu đề sách: " + book.getTitle());
 
                 Intent reviewIntent = new Intent(ChiTietSach.this, DanhGiaActivity.class);
                 reviewIntent.putExtra("book_id", book.getId());
@@ -227,41 +283,35 @@ public class ChiTietSach extends AppCompatActivity {
         favoriteButton.setOnClickListener(v -> {
             LibraryManager libraryManager = LibraryManager.getInstance();
             boolean isFavorite = book.isFavorites();
-            Log.d("ChiTietSach", "Book " + book.getId() + " is favorite: " + isFavorite);
             if (isFavorite) {
                 if (libraryManager.removeFromFavorites(ChiTietSach.this, book)) {
                     Toast.makeText(ChiTietSach.this, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
-                    book.setFavorites(false); // Đồng bộ trạng thái
+                    book.setFavorites(false);
                     updateFavoriteButton();
-                    // Update likes count in UI
                     bookLikes.setText(book.getLikes());
                 }
             } else {
                 if (libraryManager.addToFavorites(ChiTietSach.this, book)) {
                     Toast.makeText(ChiTietSach.this, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
-                    book.setFavorites(true); // Đồng bộ trạng thái
+                    book.setFavorites(true);
                     updateFavoriteButton();
-                    // Update likes count in UI
                     bookLikes.setText(book.getLikes());
                 }
             }
         });
 
-        // Add this at the end of onCreate() method, after loading book data
         updateBookStats();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        // Check if book is in favorites list and update UI accordingly
         if (book != null && book.getId() != null) {
             boolean isFavorite = LibraryManager.getInstance().isBookFavorite(book.getId());
             book.setFavorites(isFavorite);
             updateFavoriteButton();
         }
 
-        // Đảm bảo nút đánh giá luôn hiển thị khi quay lại màn hình
         if (reviewLabel != null) {
             reviewLabel.setVisibility(View.VISIBLE);
         }
@@ -270,45 +320,67 @@ public class ChiTietSach extends AppCompatActivity {
     private void updateFavoriteButton() {
         boolean isFavorite = book.isFavorites();
         Log.d("ChiTietSach", "Updating favorite button for book " + book.getId() + ". Is favorite: " + isFavorite);
-        if (isFavorite) {
-            favoriteButton.setImageResource(R.drawable.tim_day);
-        } else {
-            favoriteButton.setImageResource(R.drawable.tim);
-        }
+        favoriteButton.setImageResource(isFavorite ? R.drawable.tim_day : R.drawable.tim);
     }
 
     private void loadRelatedBooks() {
-        if (book == null || book.getAuthor() == null) {
-            relatedBooksAdapter = new RelatedBooksAdapter(this, new ArrayList<>());
-            relatedBooksRecyclerView.setAdapter(relatedBooksAdapter);
+        if (book == null || book.getAuthor() == null || book.getAuthor().trim().isEmpty()) {
+            Log.e("ChiTietSach", "Book or author is null/empty, book: " + (book != null ? book.getTitle() : "null") + ", author: " + (book != null ? book.getAuthor() : "null"));
+            relatedBooksAdapter.updateBooks(new ArrayList<>());
+            relatedBooksRecyclerView.setVisibility(View.GONE);
             return;
         }
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        // Chuẩn hóa tên tác giả
+        String currentAuthor = book.getAuthor().trim().toLowerCase();
+        Log.d("ChiTietSach", "Loading related books for book: " + book.getTitle() + ", Author (normalized): " + currentAuthor);
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Book> relatedBooks = new ArrayList<>();
+                Log.d("ChiTietSach", "Total books in Firebase: " + dataSnapshot.getChildrenCount());
+
                 for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
                     Book b = bookSnapshot.getValue(Book.class);
-                    if (b != null && b.getId() != null && book.getId() != null &&
-                            !b.getId().equals(book.getId()) &&
-                            b.getAuthor() != null && book.getAuthor() != null &&
-                            b.getAuthor().equals(book.getAuthor())) {
-                        relatedBooks.add(b);
+                    if (b != null && b.getId() != null && b.getAuthor() != null && !b.getAuthor().trim().isEmpty()) {
+                        // Chuẩn hóa tên tác giả từ Firebase
+                        String firebaseAuthor = b.getAuthor().trim().toLowerCase();
+                        Log.d("ChiTietSach", "Book found: " + b.getTitle() + ", Author (normalized): " + firebaseAuthor + ", ID: " + b.getId());
+
+                        // Kiểm tra sách cùng tác giả, bỏ qua chính sách hiện tại
+                        if (!b.getId().equals(book.getId()) && firebaseAuthor.equals(currentAuthor)) {
+                            relatedBooks.add(b);
+                            Log.d("ChiTietSach", "Added related book: " + b.getTitle() + " by " + b.getAuthor());
+                        } else {
+                            Log.d("ChiTietSach", "Skipped book: " + b.getTitle() + " (Author: " + firebaseAuthor + " vs Expected: " + currentAuthor + ")");
+                        }
+                    } else {
+                        Log.w("ChiTietSach", "Failed to parse book or missing ID/author for key: " + bookSnapshot.getKey());
                     }
                 }
-                relatedBooksAdapter = new RelatedBooksAdapter(ChiTietSach.this, relatedBooks);
-                relatedBooksRecyclerView.setAdapter(relatedBooksAdapter);
+
+                Log.d("ChiTietSach", "Total related books found: " + relatedBooks.size() + " for author: " + currentAuthor);
+                relatedBooksAdapter.updateBooks(relatedBooks);
+                relatedBooksRecyclerView.setVisibility(relatedBooks.isEmpty() ? View.GONE : View.VISIBLE);
+
+                if (relatedBooks.isEmpty()) {
+                    Log.w("ChiTietSach", "No related books found for author: " + currentAuthor + ". Check Firebase data.");
+                    Toast.makeText(ChiTietSach.this, "Không tìm thấy sách cùng tác giả.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("ChiTietSach", "Related books loaded successfully: " + relatedBooks.size());
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Xử lý lỗi nếu có
                 Log.e("ChiTietSach", "Error loading related books: " + databaseError.getMessage());
+                Toast.makeText(ChiTietSach.this, "Lỗi tải sách liên quan: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                relatedBooksAdapter.updateBooks(new ArrayList<>());
+                relatedBooksRecyclerView.setVisibility(View.GONE);
             }
         });
     }
-
     private void updateBookStats() {
         if (book != null && book.getId() != null) {
             DatabaseReference bookRef = databaseReference.child(book.getId());
@@ -316,7 +388,6 @@ public class ChiTietSach extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        // Update only the stats fields
                         if (snapshot.child("views").exists()) {
                             String views = snapshot.child("views").getValue(String.class);
                             if (views != null) {
