@@ -90,7 +90,9 @@ public class Book implements Serializable {
     public void setId(String id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-    public void setAuthor(String author) { this.author = author; }
+    public void setAuthor(String author) {
+        this.author = (author != null && !author.trim().isEmpty()) ? author.trim().replaceAll("\\s+", " ") : "Unknown Author";
+    }
     public void setDescription(String description) { this.description = description; }
     public void setPublicationDate(String publicationDate) { this.publicationDate = publicationDate; }
     public void setPageCount(int pageCount) { this.pageCount = pageCount; }
@@ -114,10 +116,10 @@ public class Book implements Serializable {
     }
     public void setAverageRating(Object averageRating) {
         if (averageRating instanceof Number) {
-            this.averageRating = ((Number) averageRating).floatValue();
+            this.averageRating = Math.round(((Number) averageRating).floatValue() * 10.0f) / 10.0f;
         } else if (averageRating instanceof String) {
             try {
-                this.averageRating = Float.parseFloat((String) averageRating);
+                this.averageRating = Math.round(Float.parseFloat((String) averageRating) * 10.0f) / 10.0f;
             } catch (NumberFormatException e) {
                 this.averageRating = 0.0f;
             }
@@ -125,6 +127,8 @@ public class Book implements Serializable {
             this.averageRating = 0.0f;
         }
     }
+
+
     public void setCategory(String category) { this.category = category; }
     public void setChapters(List<Chapter> chapters) {
         if (chapters != null) {

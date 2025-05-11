@@ -1,6 +1,8 @@
 package com.example.BookHeaven.sach;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,12 @@ public class RelatedBooksAdapter extends RecyclerView.Adapter<RelatedBooksAdapte
         this.books = books;
     }
 
+    // Phương thức để cập nhật danh sách sách
+    public void updateBooks(List<Book> newBooks) {
+        this.books = newBooks;
+        notifyDataSetChanged(); // Làm mới RecyclerView
+    }
+
     @NonNull
     @Override
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,11 +49,18 @@ public class RelatedBooksAdapter extends RecyclerView.Adapter<RelatedBooksAdapte
                 .error(R.drawable.book_tinh_yeu_dau_doi)
                 .into(holder.bookCover);
         holder.bookTitle.setText(book.getTitle());
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ChiTietSach.class);
+            intent.putExtra("book", book); // Đảm bảo book chứa đầy đủ author
+            Log.d("RelatedBooksAdapter", "Passing book to ChiTietSach: " + book.getTitle() + ", Author: " + book.getAuthor());
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return books.size();
+        return books != null ? books.size() : 0;
     }
 
     static class BookViewHolder extends RecyclerView.ViewHolder {
