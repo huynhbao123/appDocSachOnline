@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.BookHeaven.TimKiem.SearchActivity;
 import com.example.BookHeaven.adapter.BookAdapter;
 import com.example.BookHeaven.models.Book;
 import com.example.BookHeaven.sach.ChiTietSach;
@@ -62,10 +63,16 @@ public class LibraryActivity extends AppCompatActivity {
         bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) {
-                startActivity(new Intent(this, TrangChu.class));
+                Intent intent = new Intent(this, TrangChu.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 finish();
                 return true;
-            } else if (itemId == R.id.navigation_menu) {
+            } else if (itemId == R.id.navigation_search) {
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
+            } else if (itemId == R.id.navigation_library) {
+                startActivity(new Intent(this, LibraryActivity.class));
                 return true;
             }
             return false;

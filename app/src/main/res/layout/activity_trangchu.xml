@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="16dp"
+                android:padding="20dp"
                 android:gravity="center_vertical">
 
                 <LinearLayout
@@ -33,8 +33,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="BookHaven "
-                        android:textColor="#FFB3B3 "
+                        android:text="Book Haven "
+                        android:textColor="#FF6666"
                         android:textSize="40sp"
                         android:textStyle="bold"
                         android:typeface="serif" />
@@ -57,10 +57,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/featuredBooksRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="237dp"
                 android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="24dp" />
+                android:paddingStart="24dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="32dp"
+                android:paddingBottom="8dp" />
 
             <!-- Economic Books Section -->
             <TextView
@@ -188,7 +190,7 @@
         android:background="#FF6666"
         app:itemIconTint="@android:color/white"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconSize="50dp"
+        app:itemIconSize="40dp"
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false" />
 

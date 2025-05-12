@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.BookHeaven.TimKiem.SearchActivity;
 import com.example.BookHeaven.adapter.BookAdapter;
 import com.example.BookHeaven.models.Book;
 import com.example.BookHeaven.sach.ChiTietSach;
@@ -56,13 +57,18 @@ public class CategoryDetailActivity extends AppCompatActivity {
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_home) {
-                startActivity(new Intent(this, MainActivityTien.class));
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_home) {
+                Intent intent = new Intent(this, TrangChu.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 finish();
                 return true;
-            } else if (item.getItemId() == R.id.navigation_menu) {
+            } else if (itemId == R.id.navigation_search) {
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
+            } else if (itemId == R.id.navigation_library) {
                 startActivity(new Intent(this, LibraryActivity.class));
-                finish();
                 return true;
             }
             return false;
@@ -86,6 +92,9 @@ public class CategoryDetailActivity extends AppCompatActivity {
                 if ("1".equals(categoryId)) categoryName = "novel";
                 else if ("2".equals(categoryId)) categoryName = "economic";
                 else if ("3".equals(categoryId)) categoryName = "emotional";
+                else if ("4".equals(categoryId)) categoryName = "horror";
+                else if ("5".equals(categoryId)) categoryName = "history";
+                else if ("6".equals(categoryId)) categoryName = "science";
 
                 for (Book book : allBooks) {
                     if (book != null && categoryName.equals(book.getCategory())) {

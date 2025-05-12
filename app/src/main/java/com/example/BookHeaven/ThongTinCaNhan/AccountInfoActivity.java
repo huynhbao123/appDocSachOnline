@@ -3,13 +3,17 @@ package com.example.BookHeaven.ThongTinCaNhan;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.BookHeaven.R;
 
+
 public class AccountInfoActivity extends AppCompatActivity {
+    private ImageView ivBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +22,10 @@ public class AccountInfoActivity extends AppCompatActivity {
         // Khởi tạo các TextView
         TextView tvEmail = findViewById(R.id.tvEmail);
         TextView tvUsername = findViewById(R.id.tvUsername);
+        ivBack = findViewById(R.id.ivBack);
+
+        // Sự kiện nút quay lại
+        ivBack.setOnClickListener(v -> finish());
 
         // Lấy dữ liệu từ SharedPreferences
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);

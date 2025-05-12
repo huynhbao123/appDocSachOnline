@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -79,7 +80,8 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this,2));
+        searchResultsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         bookAdapterlinh = new BookAdapterlinh(new ArrayList<>(), false);
         bookAdapterlinh.setOnItemClickListener(book -> {
             // Tải dữ liệu Book đầy đủ từ Firebase

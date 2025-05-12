@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                         "Vui lòng kiểm tra email để lấy mã xác minh",
                                                         Toast.LENGTH_LONG).show();
                                                 // Navigate to OtpActivity
-                                                Intent intent = new Intent(RegisterActivity.this, OtpActivity.class);
+                                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                                 intent.putExtra("source", "RegisterActivity");
                                                 intent.putExtra("email", email);
                                                 startActivity(intent);

@@ -32,9 +32,9 @@ public class OtpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_otp);
 
         // Ánh xạ View
-        edtOtp = findViewById(R.id.edtOtp);
-        btnVerify = findViewById(R.id.btnVerify);
-        tvResend = findViewById(R.id.tvGuilai);
+        edtOtp = findViewById(R.id.edtEmailqmk);
+        btnVerify = findViewById(R.id.btnGuima);
+        tvResend = findViewById(R.id.tvRegister);
         btnBack = findViewById(R.id.btnBack);
 
         // Hiển thị bàn phím khi nhấn vào EditText

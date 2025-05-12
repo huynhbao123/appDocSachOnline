@@ -16,18 +16,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.BookHeaven.DangNhap.LoginActivity;
 import com.example.BookHeaven.R;
-import com.example.BookHeaven.models.Book; // Thay Booklinh bằng Book
+import com.example.BookHeaven.models.Book;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.ViewHolder> {
-    private List<Book> books; // Thay Booklinh bằng Book
+    private List<Book> books;
     private Context context;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(Book book); // Thay Booklinh bằng Book
+        void onItemClick(Book book);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -35,11 +35,10 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
     }
 
     public PopularBookAdapter(List<Book> books) {
-        this.books = books != null ? books : new ArrayList<>(); // Thay Booklinh bằng Book
+        this.books = books != null ? books : new ArrayList<>();
     }
 
-    // Thêm phương thức updateBooks để cập nhật danh sách sách
-    public void updateBooks(List<Book> newBooks) { // Thay Booklinh bằng Book
+    public void updateBooks(List<Book> newBooks) {
         this.books = newBooks != null ? newBooks : new ArrayList<>();
         notifyDataSetChanged();
     }
@@ -48,19 +47,20 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_book, parent, false);
+        // Sử dụng item_book_linh.xml thay vì item_popular_book.xml
+        View view = LayoutInflater.from(context).inflate(R.layout.item_book_linh, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Book book = books.get(position); // Thay Booklinh bằng Book
+        Book book = books.get(position);
 
         // Load book image using Glide
         Glide.with(context)
                 .load(book.getImageUrl())
-                .placeholder(android.R.drawable.ic_menu_camera) // Thay bằng R.drawable.book_placeholder khi có
-                .error(android.R.drawable.ic_menu_gallery) // Thay bằng R.drawable.book_error khi có
+                .placeholder(R.drawable.book_placeholder) // Sử dụng placeholder từ item_book_linh.xml
+                .error(R.drawable.book_placeholder) // Sử dụng error placeholder
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imgBook);
 
@@ -74,7 +74,7 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
 
             if (isLoggedIn) {
                 if (listener != null) {
-                    listener.onItemClick(book); // Thay Booklinh bằng Book
+                    listener.onItemClick(book);
                 }
             } else {
                 Intent intent = new Intent(context, LoginActivity.class);
@@ -94,8 +94,9 @@ public class PopularBookAdapter extends RecyclerView.Adapter<PopularBookAdapter.
 
         ViewHolder(View itemView) {
             super(itemView);
-            imgBook = itemView.findViewById(R.id.imgBook);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
+            // Sử dụng các ID từ item_book_linh.xml
+            imgBook = itemView.findViewById(R.id.bookImage);
+            tvTitle = itemView.findViewById(R.id.bookTitle);
         }
     }
 }

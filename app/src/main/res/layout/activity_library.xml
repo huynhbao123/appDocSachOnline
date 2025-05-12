@@ -109,7 +109,7 @@
         android:background="#FF6666"
         app:itemIconTint="@android:color/white"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconSize="50dp"
+        app:itemIconSize="40dp"
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"

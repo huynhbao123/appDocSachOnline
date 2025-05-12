@@ -58,6 +58,8 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.8")
     implementation("com.google.firebase:firebase-auth")
     implementation ("com.google.firebase:firebase-firestore:24.10.0")
+    implementation ("com.google.android.material:material:1.9.0")
+
 
 
     // Gson
