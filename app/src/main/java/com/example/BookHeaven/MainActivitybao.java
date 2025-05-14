@@ -1,6 +1,7 @@
 package com.example.BookHeaven;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -56,6 +57,7 @@ public class MainActivitybao extends AppCompatActivity {
     private boolean isSavedPositionsPanelVisible = false;
     private boolean isCustomizePanelVisible = false;
     private String bookTitleFromIntent = "Kinh tế số";
+    private int currentBackgroundColor = 0xFFFFFFFF; // Màu trắng mặc định
 
     private List<String> chapterTitlesList = new ArrayList<>();
     private List<String> chapterContentsList = new ArrayList<>();
@@ -274,7 +276,10 @@ public class MainActivitybao extends AppCompatActivity {
         });
 
         homeButton.setOnClickListener(v -> {
-            Toast.makeText(MainActivitybao.this, "Nút Home được nhấn", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivitybao.this, TrangChu.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
         });
 
         chapterListView.setOnItemClickListener((parent, view, position, id) -> {
@@ -312,34 +317,78 @@ public class MainActivitybao extends AppCompatActivity {
         });
 
         colorBlack.setOnClickListener(v -> {
-            scrollView.setBackgroundColor(0xFF000000);
-            contentText.setTextColor(0xFFFFFFFF);
-            chapterTitleText.setTextColor(0xFFFFFFFF);
+            if (currentBackgroundColor == 0xFF000000) { // Nếu đang là màu đen
+                scrollView.setBackgroundColor(0xFFFFFFFF); // Trở về trắng
+                contentText.setTextColor(0xFF000000); // Màu chữ đen
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFFFFFFFF;
+            } else {
+                scrollView.setBackgroundColor(0xFF000000);
+                contentText.setTextColor(0xFFFFFFFF); // Màu chữ trắng
+                chapterTitleText.setTextColor(0xFFFFFFFF);
+                currentBackgroundColor = 0xFF000000;
+            }
         });
 
         colorGreen.setOnClickListener(v -> {
-            scrollView.setBackgroundColor(0xFF00FF00);
-            contentText.setTextColor(0xFF000000);
-            chapterTitleText.setTextColor(0xFF000000);
+            if (currentBackgroundColor == 0xFF00FF00) { // Nếu đang là màu xanh lá
+                scrollView.setBackgroundColor(0xFFFFFFFF);
+                contentText.setTextColor(0xFF000000);
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFFFFFFFF;
+            } else {
+                scrollView.setBackgroundColor(0xFF00FF00);
+                contentText.setTextColor(0xFF000000);
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFF00FF00;
+            }
         });
 
         colorYellow.setOnClickListener(v -> {
-            scrollView.setBackgroundColor(0xFFFFFFCC);
-            contentText.setTextColor(0xFF000000);
-            chapterTitleText.setTextColor(0xFF000000);
+            if (currentBackgroundColor == 0xFFFFFFCC) { // Nếu đang là màu vàng
+                scrollView.setBackgroundColor(0xFFFFFFFF);
+                contentText.setTextColor(0xFF000000);
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFFFFFFFF;
+            } else {
+                scrollView.setBackgroundColor(0xFFFFFFCC);
+                contentText.setTextColor(0xFF000000);
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFFFFFFCC;
+            }
         });
 
         colorPink.setOnClickListener(v -> {
-            scrollView.setBackgroundColor(0xFFFF99CC);
-            contentText.setTextColor(0xFF000000);
-            chapterTitleText.setTextColor(0xFF000000);
+            if (currentBackgroundColor == 0xFFFF99CC) { // Nếu đang là màu hồng
+                scrollView.setBackgroundColor(0xFFFFFFFF);
+                contentText.setTextColor(0xFF000000);
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFFFFFFFF;
+            } else {
+                scrollView.setBackgroundColor(0xFFFF99CC);
+                contentText.setTextColor(0xFF000000);
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFFFF99CC;
+            }
         });
 
         colorBlue.setOnClickListener(v -> {
-            scrollView.setBackgroundColor(0xFF99CCFF);
-            contentText.setTextColor(0xFF000000);
-            chapterTitleText.setTextColor(0xFF000000);
+            if (currentBackgroundColor == 0xFF99CCFF) { // Nếu đang là màu xanh dương
+                scrollView.setBackgroundColor(0xFFFFFFFF);
+                contentText.setTextColor(0xFF000000);
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFFFFFFFF;
+            } else {
+                scrollView.setBackgroundColor(0xFF99CCFF);
+                contentText.setTextColor(0xFF000000);
+                chapterTitleText.setTextColor(0xFF000000);
+                currentBackgroundColor = 0xFF99CCFF;
+            }
         });
+        scrollView.setBackgroundColor(0xFFFFFFFF); // Màu trắng
+        contentText.setTextColor(0xFF000000); // Màu chữ đen
+        chapterTitleText.setTextColor(0xFF000000);
+        currentBackgroundColor = 0xFFFFFFFF; // Khởi tạo màu hiện tại
 
         decreaseFontSizeButton.setOnClickListener(v -> {
             if (currentTextSize > 12) {
