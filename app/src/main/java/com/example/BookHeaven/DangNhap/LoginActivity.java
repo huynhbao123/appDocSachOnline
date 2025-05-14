@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // Check if email is verified
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 if (user != null && user.isEmailVerified()) {
-                                    // Trích xuất username từ email (phần trước @)
+                                    // Trích xuất username từ email
                                     String username = email.contains("@") ? email.split("@")[0] : email;
 
                                     // Lưu thông tin vào SharedPreferences
@@ -80,18 +80,19 @@ public class LoginActivity extends AppCompatActivity {
                                     editor.putString("username", username);
                                     editor.apply();
 
-                                    // Log để debug
-                                    Log.d("LoginActivity", "Email: " + user.getEmail() + ", Username: " + username);
+                                    // Tải danh sách yêu thích cho tài khoản mới
+                                    LibraryManager.getInstance().onAuthStateChanged();
 
+                                    Log.d("LoginActivity", "Email: " + user.getEmail() + ", Username: " + username);
                                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
-                                    // Chuyển hướng ngay lập tức đến TrangChu
+                                    // Chuyển hướng đến TrangChu
                                     Intent intent = new Intent(LoginActivity.this, TrangChu.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                     finish();
 
-                                    // Tải dữ liệu LibraryManager nền (không chặn UI)
+                                    // Tải dữ liệu LibraryManager nền
                                     LibraryManager.getInstance().setOnDataLoadedListener(() -> {
                                         Log.d("LoginActivity", "Library data loaded successfully");
                                     });
@@ -101,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.LENGTH_LONG).show();
                                 }
                             } else {
-                                // Login failed
                                 Log.e("LoginActivity", "Login failed: ", task.getException());
                                 Toast.makeText(LoginActivity.this,
                                         task.getException() != null ? task.getException().getMessage() : "Đăng nhập thất bại",
@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Mở bàn phím mặc định cho người dùng dễ nhập
+        // Mở bàn phím mặc định
         autoShowKeyboard(edtEmail);
     }
 

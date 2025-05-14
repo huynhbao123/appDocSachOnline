@@ -108,21 +108,17 @@ public class TrangChu extends AppCompatActivity {
     }
 
     private void logout() {
-        FirebaseAuth.getInstance().signOut(); // Đăng xuất Firebase
+        FirebaseAuth.getInstance().signOut();
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("isLoggedIn", false);
         editor.apply();
 
-        updateAvatar();
+        // Làm mới danh sách yêu thích
+        LibraryManager.getInstance().onAuthStateChanged();
 
-        featuredBooksRecyclerView.setAlpha(0.5f);
-        economicBooksRecyclerView.setAlpha(0.5f);
-        emotionalBooksRecyclerView.setAlpha(0.5f);
-        novelBooksRecyclerView.setAlpha(0.5f);
-        horrorBooksRecyclerView.setAlpha(0.5f);
-        historyBooksRecyclerView.setAlpha(0.5f);
-        scienceBooksRecyclerView.setAlpha(0.5f);
+        updateAvatar();
+        updateUI();
     }
 
     private void updateAvatar() {
