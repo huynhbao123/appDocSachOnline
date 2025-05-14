@@ -24,6 +24,7 @@ public class LibraryManager {
     private List<Book> favoritesList;
     private DatabaseReference booksRef;
     private DatabaseReference userFavoritesRef;
+    private DatabaseReference userReadingListRef;
     private boolean isLoading = false;
     private OnDataLoadedListener dataLoadedListener;
     private int loadedLists = 0;
@@ -36,7 +37,7 @@ public class LibraryManager {
         readingList = new ArrayList<>();
         favoritesList = new ArrayList<>();
         booksRef = FirebaseDatabase.getInstance().getReference("books");
-        updateUserFavoritesReference();
+        updateUserReferences();
         loadListsFromFirebase();
     }
 
@@ -47,16 +48,22 @@ public class LibraryManager {
         return instance;
     }
 
-    private void updateUserFavoritesReference() {
+    private void updateUserReferences() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && user.isEmailVerified()) {
             userFavoritesRef = FirebaseDatabase.getInstance()
                     .getReference("users")
                     .child(user.getUid())
                     .child("favorites");
+            userReadingListRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(user.getUid())
+                    .child("readingList");
         } else {
             userFavoritesRef = null;
+            userReadingListRef = null;
             favoritesList.clear();
+            readingList.clear();
         }
     }
 
@@ -81,11 +88,13 @@ public class LibraryManager {
         }
 
         if (book != null && !isBookInReadingList(book.getId())) {
-            book.setReadingList(true);
             readingList.add(book);
-            updateBookInFirebase(book);
+            userReadingListRef.child(book.getId()).setValue(book)
+                    .addOnSuccessListener(aVoid -> Log.d("LibraryManager", "Added to reading list: " + book.getId()))
+                    .addOnFailureListener(e -> Log.e("LibraryManager", "Failed to add to reading list: " + e.getMessage()));
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean addToFavorites(Context context, Book book) {
@@ -98,14 +107,11 @@ public class LibraryManager {
 
         if (book != null && !isBookInFavorites(book.getId())) {
             favoritesList.add(book);
-            // Increment likes count
             int currentLikes = book.getLikesCount();
             book.setLikes(String.valueOf(currentLikes + 1));
-            // Update likes in Firebase
             booksRef.child(book.getId()).child("likes").setValue(book.getLikes())
                     .addOnSuccessListener(aVoid -> Log.d("LibraryManager", "Updated book likes: " + book.getId() + " - Likes: " + book.getLikes()))
                     .addOnFailureListener(e -> Log.e("LibraryManager", "Failed to update likes: " + e.getMessage()));
-            // Save to user's favorites
             userFavoritesRef.child(book.getId()).setValue(book)
                     .addOnSuccessListener(aVoid -> Log.d("LibraryManager", "Added to favorites: " + book.getId()))
                     .addOnFailureListener(e -> Log.e("LibraryManager", "Failed to add favorite: " + e.getMessage()));
@@ -123,11 +129,13 @@ public class LibraryManager {
         }
 
         if (book != null && isBookInReadingList(book.getId())) {
-            book.setReadingList(false);
             removeBookFromReadingList(book.getId());
-            updateBookInFirebase(book);
+            userReadingListRef.child(book.getId()).removeValue()
+                    .addOnSuccessListener(aVoid -> Log.d("LibraryManager", "Removed from reading list: " + book.getId()))
+                    .addOnFailureListener(e -> Log.e("LibraryManager", "Failed to remove from reading list: " + e.getMessage()));
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean removeFromFavorites(Context context, Book book) {
@@ -140,16 +148,13 @@ public class LibraryManager {
 
         if (book != null && isBookInFavorites(book.getId())) {
             removeBookFromFavorites(book.getId());
-            // Decrement likes count, ensure it doesn't go below 0
             int currentLikes = book.getLikesCount();
             if (currentLikes > 0) {
                 book.setLikes(String.valueOf(currentLikes - 1));
             }
-            // Update likes in Firebase
             booksRef.child(book.getId()).child("likes").setValue(book.getLikes())
                     .addOnSuccessListener(aVoid -> Log.d("LibraryManager", "Updated book likes: " + book.getId() + " - Likes: " + book.getLikes()))
                     .addOnFailureListener(e -> Log.e("LibraryManager", "Failed to update likes: " + e.getMessage()));
-            // Remove from user's favorites
             userFavoritesRef.child(book.getId()).removeValue()
                     .addOnSuccessListener(aVoid -> Log.d("LibraryManager", "Removed from favorites: " + book.getId()))
                     .addOnFailureListener(e -> Log.e("LibraryManager", "Failed to remove favorite: " + e.getMessage()));
@@ -184,44 +189,38 @@ public class LibraryManager {
         favoritesList.removeIf(book -> book.getId() != null && book.getId().equals(bookId));
     }
 
-    private void updateBookInFirebase(Book book) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null && user.isEmailVerified() && book != null && book.getId() != null) {
-            booksRef.child(book.getId()).setValue(book)
-                    .addOnSuccessListener(aVoid -> Log.d("LibraryManager", "Updated book in Firebase: " + book.getId()))
-                    .addOnFailureListener(e -> Log.e("LibraryManager", "Failed to update book: " + e.getMessage()));
-        }
-    }
-
     private void loadListsFromFirebase() {
         isLoading = true;
         loadedLists = 0;
 
-        // Load reading list from books
-        booksRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                readingList.clear();
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null && user.isEmailVerified()) {
+        // Load reading list from users/<uid>/readingList
+        if (userReadingListRef != null) {
+            userReadingListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    readingList.clear();
                     for (DataSnapshot bookSnapshot : snapshot.getChildren()) {
                         Book book = bookSnapshot.getValue(Book.class);
-                        if (book != null && book.isReadingList()) {
+                        if (book != null) {
                             readingList.add(book);
                         }
                     }
+                    loadedLists++;
+                    checkIfLoadingComplete();
                 }
-                loadedLists++;
-                checkIfLoadingComplete();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("LibraryManager", "Error loading reading list: " + error.getMessage());
-                loadedLists++;
-                checkIfLoadingComplete();
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("LibraryManager", "Error loading reading list: " + error.getMessage());
+                    loadedLists++;
+                    checkIfLoadingComplete();
+                }
+            });
+        } else {
+            readingList.clear();
+            loadedLists++;
+            checkIfLoadingComplete();
+        }
 
         // Load favorites from users/<uid>/favorites
         if (userFavoritesRef != null) {
@@ -290,7 +289,7 @@ public class LibraryManager {
     }
 
     public void onAuthStateChanged() {
-        updateUserFavoritesReference();
+        updateUserReferences();
         loadListsFromFirebase();
     }
 }

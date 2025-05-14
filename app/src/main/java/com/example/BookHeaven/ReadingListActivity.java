@@ -15,6 +15,11 @@ import com.example.BookHeaven.sach.ChiTietSach;
 
 public class ReadingListActivity extends AppCompatActivity {
 
+    private RecyclerView readingListRecyclerView;
+    private TextView emptyMessage;
+    private BookAdapter bookAdapter;
+    private LibraryManager libraryManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,19 +28,28 @@ public class ReadingListActivity extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
 
-        TextView emptyMessage = findViewById(R.id.emptyMessage);
-        RecyclerView readingListRecyclerView = findViewById(R.id.readingListRecyclerView);
+        emptyMessage = findViewById(R.id.emptyMessage);
+        readingListRecyclerView = findViewById(R.id.readingListRecyclerView);
         readingListRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        LibraryManager libraryManager = LibraryManager.getInstance();
-        BookAdapter bookAdapter = new BookAdapter(libraryManager.getReadingList(), book -> {
+        libraryManager = LibraryManager.getInstance();
+        bookAdapter = new BookAdapter(libraryManager.getReadingList(), book -> {
             Intent intent = new Intent(ReadingListActivity.this, ChiTietSach.class);
             intent.putExtra("book", book);
             startActivity(intent);
         });
         readingListRecyclerView.setAdapter(bookAdapter);
 
-        // Hiển thị thông báo nếu danh sách rỗng
+        // Set listener to update UI when data is loaded
+        libraryManager.setOnDataLoadedListener(this::updateUI);
+
+        // Update UI immediately if data is already loaded
+        if (!libraryManager.isLoading()) {
+            updateUI();
+        }
+    }
+
+    private void updateUI() {
         if (libraryManager.getReadingList().isEmpty()) {
             emptyMessage.setVisibility(TextView.VISIBLE);
             readingListRecyclerView.setVisibility(RecyclerView.GONE);
@@ -43,25 +57,13 @@ public class ReadingListActivity extends AppCompatActivity {
             emptyMessage.setVisibility(TextView.GONE);
             readingListRecyclerView.setVisibility(RecyclerView.VISIBLE);
         }
+        bookAdapter.notifyDataSetChanged();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Cập nhật lại RecyclerView khi quay lại activity
-        RecyclerView readingListRecyclerView = findViewById(R.id.readingListRecyclerView);
-        TextView emptyMessage = findViewById(R.id.emptyMessage);
-        LibraryManager libraryManager = LibraryManager.getInstance();
-        BookAdapter adapter = (BookAdapter) readingListRecyclerView.getAdapter();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-            if (libraryManager.getReadingList().isEmpty()) {
-                emptyMessage.setVisibility(TextView.VISIBLE);
-                readingListRecyclerView.setVisibility(RecyclerView.GONE);
-            } else {
-                emptyMessage.setVisibility(TextView.GONE);
-                readingListRecyclerView.setVisibility(RecyclerView.VISIBLE);
-            }
-        }
+        // Update UI when resuming, in case data changed
+        updateUI();
     }
 }
