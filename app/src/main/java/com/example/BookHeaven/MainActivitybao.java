@@ -129,7 +129,7 @@ public class MainActivitybao extends AppCompatActivity {
         bookTitle.setText(bookTitleFromIntent);
         bookTitleSaved.setText(bookTitleFromIntent);
 
-        // Lấy chapters từ Book (Sửa đổi ở đây)
+        // Lấy chapters từ Book
         chapterTitlesList.clear();
         chapterContentsList.clear();
         List<Book.Chapter> chapters = book.getChapters();
