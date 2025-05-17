@@ -198,11 +198,19 @@ public class LibraryManager {
             userReadingListRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Log.d("LibraryManager", "Loading readingList node: " + snapshot.getRef() + ", Data: " + snapshot.getValue());
                     readingList.clear();
                     for (DataSnapshot bookSnapshot : snapshot.getChildren()) {
-                        Book book = bookSnapshot.getValue(Book.class);
-                        if (book != null) {
-                            readingList.add(book);
+                        Log.d("LibraryManager", "ReadingList child: " + bookSnapshot.getKey() + ", Value: " + bookSnapshot.getValue());
+                        try {
+                            Book book = bookSnapshot.getValue(Book.class);
+                            if (book != null && isValidBook(book)) {
+                                readingList.add(book);
+                            } else {
+                                Log.w("LibraryManager", "Invalid book data skipped in readingList: " + bookSnapshot.getKey());
+                            }
+                        } catch (Exception e) {
+                            Log.e("LibraryManager", "Error parsing book in readingList: " + bookSnapshot.getKey() + ", Error: " + e.getMessage());
                         }
                     }
                     loadedLists++;
@@ -227,11 +235,19 @@ public class LibraryManager {
             userFavoritesRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Log.d("LibraryManager", "Loading favorites node: " + snapshot.getRef() + ", Data: " + snapshot.getValue());
                     favoritesList.clear();
                     for (DataSnapshot bookSnapshot : snapshot.getChildren()) {
-                        Book book = bookSnapshot.getValue(Book.class);
-                        if (book != null) {
-                            favoritesList.add(book);
+                        Log.d("LibraryManager", "Favorites child: " + bookSnapshot.getKey() + ", Value: " + bookSnapshot.getValue());
+                        try {
+                            Book book = bookSnapshot.getValue(Book.class);
+                            if (book != null && isValidBook(book)) {
+                                favoritesList.add(book);
+                            } else {
+                                Log.w("LibraryManager", "Invalid book data skipped in favorites: " + bookSnapshot.getKey());
+                            }
+                        } catch (Exception e) {
+                            Log.e("LibraryManager", "Error parsing book in favorites: " + bookSnapshot.getKey() + ", Error: " + e.getMessage());
                         }
                     }
                     loadedLists++;
@@ -250,6 +266,14 @@ public class LibraryManager {
             loadedLists++;
             checkIfLoadingComplete();
         }
+    }
+
+    private boolean isValidBook(Book book) {
+        return book != null &&
+                book.getId() != null &&
+                book.getTitle() != null &&
+                book.getAuthor() != null &&
+                book.getImageUrl() != null;
     }
 
     private void checkIfLoadingComplete() {

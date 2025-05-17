@@ -164,7 +164,7 @@ public class MainActivitybao extends AppCompatActivity {
         updateChapterContent();
         scrollView.post(() -> scrollView.scrollTo(0, savedScrollPosition));
 
-        String[] fonts = {"Times New Roman", "Arial", "Roboto"};
+        String[] fonts = {"Times New Roman", "Arial", "Roboto"};    
         ArrayAdapter<String> fontAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fonts);
         fontAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fontSpinner.setAdapter(fontAdapter);
