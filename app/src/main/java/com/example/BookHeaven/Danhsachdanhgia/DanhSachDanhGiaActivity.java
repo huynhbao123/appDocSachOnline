@@ -31,6 +31,7 @@ import java.util.List;
 
 public class DanhSachDanhGiaActivity extends AppCompatActivity {
 
+    //biến giao diện
     private RatingBar averageRatingBar;
     private TextView averageRatingText;
     private TextView reviewLabel;
@@ -39,6 +40,7 @@ public class DanhSachDanhGiaActivity extends AppCompatActivity {
     private List<Review> reviewList;
     private ImageView backButton;
 
+    //dữ liệu logic
     private String bookId;
     private String bookTitle;
     private String bookAuthor;
@@ -100,7 +102,7 @@ public class DanhSachDanhGiaActivity extends AppCompatActivity {
             if (newRating > 0 && !newComment.isEmpty()) {
                 Review newReview = new Review(newUserName, R.drawable.img_2, newRating, newComment);
                 reviewList.add(newReview);
-                reviewAdapter.notifyDataSetChanged();
+                reviewAdapter.notifyDataSetChanged(); //làm mới recyclerview ể hiển thị đánh giá mới
             }
         }
 
@@ -134,8 +136,9 @@ public class DanhSachDanhGiaActivity extends AppCompatActivity {
     private void findBookIdByTitle(String title) {
         Log.d("DanhSachDanhGiaActivity", "Tìm kiếm sách với tiêu đề: " + title);
 
-        if (TextUtils.isEmpty(title)) {
-            loadSampleReviews();
+        if (TextUtils.isEmpty(title)) //nếu title là null hoặc chuỗi rỗng ("").
+        {
+            loadSampleReviews(); //hiển thị đánh giá mẫu
             return;
         }
 
@@ -147,7 +150,8 @@ public class DanhSachDanhGiaActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Book book = snapshot.getValue(Book.class);
                     if (book != null && book.getTitle() != null &&
-                            book.getTitle().equalsIgnoreCase(title.trim())) {
+                            book.getTitle().equalsIgnoreCase(title.trim())) // so sánh title trong firebase vs title cua book mà k phân biệt cữ hoa, chữ thường
+                    {
                         bookId = book.getId();
                         bookTitle = book.getTitle();
                         bookAuthor = book.getAuthor();
@@ -231,6 +235,7 @@ public class DanhSachDanhGiaActivity extends AppCompatActivity {
             updateAverageRating();
         }
     }
+    //Tính và hiển thị xếp hạng trung bình của sách, cập nhật vào Firebase.
 
     private void updateAverageRating() {
         if (reviewList.isEmpty()) {

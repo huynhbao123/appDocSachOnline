@@ -35,11 +35,12 @@ public class RelatedBooksAdapter extends RecyclerView.Adapter<RelatedBooksAdapte
 
     @NonNull
     @Override
+    //tạo một BookViewHolder mới cho mỗi mục sách trong RecyclerView
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_related_book, parent, false);
         return new BookViewHolder(view);
     }
-
+    //liên kết dữ liệu với cuốn sacgs
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         Book book = books.get(position);
@@ -54,7 +55,7 @@ public class RelatedBooksAdapter extends RecyclerView.Adapter<RelatedBooksAdapte
             Intent intent = new Intent(context, ChiTietSach.class);
             intent.putExtra("book", book); // Đảm bảo book chứa đầy đủ author
             Log.d("RelatedBooksAdapter", "Passing book to ChiTietSach: " + book.getTitle() + ", Author: " + book.getAuthor());
-            context.startActivity(intent);
+            context.startActivity(intent); //khởi dộng activity của ChiTietSach
         });
     }
 
@@ -63,6 +64,7 @@ public class RelatedBooksAdapter extends RecyclerView.Adapter<RelatedBooksAdapte
         return books != null ? books.size() : 0;
     }
 
+    //
     static class BookViewHolder extends RecyclerView.ViewHolder {
         ImageView bookCover;
         TextView bookTitle;

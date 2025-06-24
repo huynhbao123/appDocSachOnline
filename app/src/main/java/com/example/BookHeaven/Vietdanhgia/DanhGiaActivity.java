@@ -32,6 +32,7 @@ import java.util.Map;
 
 public class DanhGiaActivity extends AppCompatActivity {
 
+    //khai báo lớp và biến
     private ImageView bookCover;
     private TextView bookTitle;
     private TextView bookAuthor;
@@ -45,12 +46,15 @@ public class DanhGiaActivity extends AppCompatActivity {
     private DatabaseReference booksRef;
 
     @Override
+    //khởi tạo Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danh_gia);
+        // liên kết activity vs xml
 
-        // Khởi tạo Firebase
+        // Khởi tạo Firebase, khởi tạo node "reviews" và node "books"
         reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
+        //ho phép bạn truy cập cơ sở dữ liệu. ở node reviews để lưu đánh giá
         booksRef = FirebaseDatabase.getInstance().getReference("books");
 
         // Khởi tạo các view
@@ -93,7 +97,8 @@ public class DanhGiaActivity extends AppCompatActivity {
             if (coverUrl != null) {
                 if (coverUrl.startsWith("http")) {
                     Picasso.get().load(coverUrl).into(bookCover);
-                } else {
+                }
+                else {
                     // Nếu là resource ID
                     try {
                         int resourceId = Integer.parseInt(coverUrl);
@@ -103,7 +108,8 @@ public class DanhGiaActivity extends AppCompatActivity {
                         bookCover.setImageResource(R.drawable.book_khoi_nghiep);
                     }
                 }
-            } else {
+            }
+            else {
                 int coverResourceId = intent.getIntExtra("book_cover", R.drawable.book_khoi_nghiep);
                 bookCover.setImageResource(coverResourceId);
             }
@@ -135,7 +141,8 @@ public class DanhGiaActivity extends AppCompatActivity {
 
                         Log.d("DanhGiaActivity", "Đã tải thông tin sách từ Firebase: " + book.getTitle());
                     }
-                } else {
+                }
+                else {
                     Log.e("DanhGiaActivity", "Không tìm thấy sách với ID: " + bookId);
                 }
             }
@@ -148,7 +155,7 @@ public class DanhGiaActivity extends AppCompatActivity {
     }
 
     private void submitReview() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); //Lấy người dùng hiện tại bằng FirebaseAuth.getInstance().getCurrentUser()
         if (user == null || !user.isEmailVerified()) {
             Toast.makeText(this, "Vui lòng đăng nhập để đánh giá", Toast.LENGTH_SHORT).show();
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -240,9 +247,9 @@ public class DanhGiaActivity extends AppCompatActivity {
         Review review = new Review(userId, displayName, R.drawable.img_2, rating, comment, bookId);
 
         // Lưu đánh giá vào Firebase
-        String reviewId = reviewsRef.push().getKey();
+        String reviewId = reviewsRef.push().getKey(); //tạo ID cho đánh gi
         if (reviewId != null) {
-            reviewsRef.child(reviewId).setValue(review)
+            reviewsRef.child(reviewId).setValue(review) //lưu review
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(DanhGiaActivity.this, "Đã gửi đánh giá thành công", Toast.LENGTH_SHORT).show();
 
@@ -264,6 +271,7 @@ public class DanhGiaActivity extends AppCompatActivity {
         }
     }
 
+    //cập nhật xếp hạng trung bình sao
     private void updateBookAverageRating(String bookId) {
         reviewsRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
